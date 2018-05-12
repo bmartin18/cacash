@@ -31,6 +31,7 @@
 /node_modules/
 
 # Assets and user uploads
+/web/assets/
 /web/bundles/
 /web/uploads/
 

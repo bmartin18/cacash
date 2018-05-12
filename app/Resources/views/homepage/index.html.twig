@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+
+    {# TODO LIST ACCOUNTS #}
+    {#{{ render(path('list_accounts')) }}#}
+
+    {# TODO CREATE ACCOUNT #}
+    {#{{ render(path('create_account')) }}#}
+
+    <div class="hide-on-large-only">
+        <h4 class="light">{{ app.user.username }}</h4>
+        <div class="collection">
+            <a href="{{ path('fos_user_profile_show') }}" class="collection-item">Profil<span class="secondary-content"><i class="material-icons">account_box</i></span></a>
+            <a href="{{ path('fos_user_security_logout') }}" class="collection-item">Déconnexion<span class="secondary-content"><i class="material-icons">exit_to_app</i></span></a>
+        </div>
+    </div>
+
+{% endblock %}

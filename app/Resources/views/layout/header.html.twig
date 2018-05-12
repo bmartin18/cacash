@@ -1,0 +1,23 @@
+{% if app.user %}
+    <nav id="comp-header">
+        <div class="container nav-wrapper">
+            <a href="{{ path('homepage') }}" id="cacash-logo"><img src="{{ asset('images/logo/cacash-header.png') }}" width="300" height="64"></a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                {# TODO LIST ACCOUNTS #}
+                {# {% for account in accounts %}
+                    <li><a href="{{ path('account', {'id': account.id, 'slug': account.slug}) }}">{{ account.name }}</a></li>
+                {% endfor %} #}
+                <li>
+                    <a class="dropdown-button" href="{{ path('fos_user_profile_show') }}" data-activates="dropdown-header" data-hover="true" data-beloworigin="true">
+                        {{ app.user.username }} <i class="material-icons right">arrow_drop_down</i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <ul id="dropdown-header" class="dropdown-content">
+        <li><a href="{{ path('fos_user_profile_show') }}">Mon profil</a></li>
+        <li><a href="{{ path('fos_user_security_logout') }}">Déconnexion</a></li>
+    </ul>
+{% endif %}

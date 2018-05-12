@@ -32,6 +32,8 @@ framework:
         log: true
     templating:
         engines: ['twig']
+    assets:
+        base_path: /assets
 
 # Twig Configuration
 twig:
