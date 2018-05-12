@@ -1,0 +1,44 @@
+{
+  "dev": {
+    "base": {
+      "src": "./app/Resources/assets/",
+      "dest": "./web/assets/"
+    },
+    "sass": {
+      "sourceComments": true,
+      "outputStyle": "nested"
+    },
+    "browserify": {
+      "debug": true
+    },
+    "babelify": {
+      "presets": ["env"]
+    },
+    "autoprefixer": {
+      "browsers": ["> 1%", "last 2 version", "Firefox ESR", "Firefox > 20", "Opera >= 10", "IE >= 8", "Safari >= 6", "Android >= 4", "IOS >= 6"],
+      "cascade": true
+    }
+  },
+  "prod": {
+    "base": {
+      "src": "./app/Resources/assets/",
+      "dest": "./web/assets/"
+    },
+    "sass": {
+      "prod": {
+        "sourceComments": false,
+        "outputStyle": "compressed"
+      }
+    },
+    "browserify": {
+      "debug": false
+    },
+    "babelify": {
+      "presets": ["env"]
+    },
+    "autoprefixer": {
+      "browsers": ["> 1%", "last 2 version", "Firefox ESR", "Firefox > 20", "Opera >= 10", "IE >= 8", "Safari >= 6", "Android >= 4", "IOS >= 6"],
+      "cascade": true
+    }
+  }
+}
