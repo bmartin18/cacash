@@ -63,7 +63,7 @@ class Transaction
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="transaction_at", type="datetime")
+     * @ORM\Column(name="transaction_at", type="date", nullable=true)
      */
     private $transactionAt;
 
@@ -223,13 +223,41 @@ class Transaction
     }
 
     /**
-     * Set transactionAt.
+     * Set amountDisplayable.
      *
-     * @param \DateTime $transactionAt
+     * @param int $amountDisplayable
      *
      * @return Transaction
      */
-    public function setTransactionAt($transactionAt)
+    public function setAmountDisplayable($amountDisplayable)
+    {
+        $this->amount = $amountDisplayable * 100;
+
+        return $this;
+    }
+
+    /**
+     * Get amountDisplayable.
+     *
+     * @return null|int
+     */
+    public function getAmountDisplayable()
+    {
+        if ($this->amount === null) {
+            return null;
+        }
+
+        return $this->amount / 100;
+    }
+
+    /**
+     * Set transactionAt.
+     *
+     * @param \DateTime|null $transactionAt
+     *
+     * @return Transaction
+     */
+    public function setTransactionAt($transactionAt = null)
     {
         $this->transactionAt = $transactionAt;
 
@@ -239,11 +267,42 @@ class Transaction
     /**
      * Get transactionAt.
      *
-     * @return \DateTime
+     * @return \DateTime|null
      */
     public function getTransactionAt()
     {
         return $this->transactionAt;
+    }
+
+    /**
+     * Set transactionAtDisplayable.
+     *
+     * @param string|null $transactionAtDisplayable
+     *
+     * @return Transaction
+     */
+    public function setTransactionAtDisplayable($transactionAtDisplayable = null)
+    {
+        $dateTime = new \DateTime();
+        $dateTime->setTimestamp(strtotime(str_replace('/', '-', $transactionAtDisplayable)));
+
+        $this->transactionAt = $dateTime;
+
+        return $this;
+    }
+
+    /**
+     * Get transactionAtDisplayable.
+     *
+     * @return string|null
+     */
+    public function getTransactionAtDisplayable()
+    {
+        if ($this->transactionAt !== null) {
+            return $this->transactionAt->format('Y/m/d');
+        }
+
+        return null;
     }
 
     /**
@@ -292,6 +351,36 @@ class Transaction
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * Set debit.
+     *
+     * @param bool $debit
+     *
+     * @return $this
+     */
+    public function setDebit($debit)
+    {
+        if ($debit && $this->getAmount() > 0) {
+            $this->setAmount($this->getAmount() * -1);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get debit.
+     *
+     * @return bool
+     */
+    public function isDebit()
+    {
+        if ($this->getAmount() < 0) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

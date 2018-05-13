@@ -3,5 +3,11 @@
 {% block title %}{{ account.name }}{% endblock %}
 
 {% block body %}
+    <div class="row">
+        <div class="col">
+            <p><a class="btn modal-trigger" href="#modal-transaction">Nouvelle transaction</a></p>
+        </div>
+    </div>
 
+    {{ render(path('create_transaction', {'id': account.id})) }}
 {% endblock %}
