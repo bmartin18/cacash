@@ -42,6 +42,13 @@ class Account
     private $slug;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="starred", type="boolean")
+     */
+    private $starred;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -122,6 +129,30 @@ class Account
     public function getSlug()
     {
         return $this->slug;
+    }
+
+    /**
+     * Set starred.
+     *
+     * @param bool $starred
+     *
+     * @return Account
+     */
+    public function setStarred($starred)
+    {
+        $this->starred = $starred;
+
+        return $this;
+    }
+
+    /**
+     * Get starred.
+     *
+     * @return bool
+     */
+    public function isStarred()
+    {
+        return $this->starred;
     }
 
     /**
