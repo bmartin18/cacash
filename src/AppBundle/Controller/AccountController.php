@@ -140,6 +140,39 @@ class AccountController extends Controller
     }
 
     /**
+     * @Route("/account/delete/{slug}-{id}", name="delete_account",
+     *      requirements={
+     *          "id": "\d+",
+     *          "slug": "[a-z0-9\-]+"
+     *      }
+     * )
+     *
+     * @ParamConverter("id", class="AppBundle:Account")
+     *
+     * @param Account $account
+     *
+     * @return RedirectResponse
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function deleteAccountAction(Account $account)
+    {
+        if ($this->getUser() !== $account->getUser()) {
+            throw $this->createAccessDeniedException('You cannot access to this account.');
+        }
+
+        $this->accountRepository->delete($account);
+
+        $this->addFlash(
+            'notice',
+            'Compte '.$account->getName().' supprimé avec succès.'
+        );
+
+        return $this->redirectToRoute('homepage');
+    }
+
+    /**
      * @Route("/accounts/list", name="list_accounts")
      *
      * @return Response

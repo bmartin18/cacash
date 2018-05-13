@@ -37,4 +37,20 @@ class AccountRepository extends ServiceEntityRepository
 
         return $account;
     }
+
+    /**
+     * @param Account $account
+     *
+     * @return Account
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function delete(Account $account)
+    {
+        $this->getEntityManager()->remove($account);
+        $this->getEntityManager()->flush();
+
+        return $account;
+    }
 }
