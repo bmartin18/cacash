@@ -3,6 +3,8 @@
 {% block title %}Modifier le compte : {{ account.name }}{% endblock %}
 
 {% block body %}
+    <h4 class="light">Modifier le compte</h4>
+
     {% include('/account/form.html.twig') %}
 
     {% for flash_message in app.session.flashBag.get('notice') %}
