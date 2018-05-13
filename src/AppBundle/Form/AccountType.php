@@ -43,6 +43,7 @@ class AccountType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Account::class,
+            'translation_domain' => false,
         ]);
     }
 }
