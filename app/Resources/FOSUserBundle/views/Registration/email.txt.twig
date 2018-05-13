@@ -1,0 +1,152 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block subject %}
+    {%- autoescape false -%}
+        {{ 'registration.email.subject'|trans({'%username%': user.username, '%confirmationUrl%': confirmationUrl}) }}
+    {%- endautoescape -%}
+{% endblock %}
+
+{% block body_text %}
+    {% autoescape false %}
+        {{ 'registration.email.message'|trans({'%username%': user.username, '%confirmationUrl%': confirmationUrl}) }}
+    {% endautoescape %}
+{% endblock %}
+
+{% block body_html %}
+    <table class="vb-outer" width="100%" cellpadding="0" border="0" cellspacing="0" bgcolor="#f2f2f2"
+           style="background-color: #f2f2f2;" id="ko_imageBlock_10">
+        <tbody>
+        <tr>
+            <td class="vb-outer" valign="top" align="center" style="padding-left: 9px;padding-right: 9px;">
+                <div class="oldwebkit" style="max-width: 570px;">
+                    <table width="570" class="vb-container fullwidth" cellpadding="0" border="0" bgcolor="#ffffff"
+                           align="center" cellspacing="0"
+                           style="border-collapse: separate;padding-left: 0;padding-right: 0;width: 100%;max-width: 570px;background-color: #fff;">
+                        <tbody>
+                        <tr>
+                            <td valign="top" align="center"><a target="_new" href="{{ url('homepage') }}"
+                                                               style="color: #3f3f3f;text-decoration: none;"><img hspace="0"
+                                                                                                                  border="0"
+                                                                                                                  vspace="0"
+                                                                                                                  width="570"
+                                                                                                                  class="mobile-full"
+                                                                                                                  alt=""
+                                                                                                                  style="border: 0px;border-radius: 0px;display: block;max-width: 570px;width: 100%;height: auto;font-size: 13px;font-family: Verdana,Geneva,sans-serif;color: #3f3f3f;"
+                                                                                                                  src="https://docs.google.com/uc?id=0B460hkJf2I40NjhKVFZPMW1XVjg"></a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table class="vb-outer" width="100%" cellpadding="0" border="0" cellspacing="0" bgcolor="#f2f2f2"
+           style="background-color: #f2f2f2;" id="ko_titleBlock_5">
+        <tbody>
+        <tr>
+            <td class="vb-outer" align="center" valign="top" bgcolor="#f2f2f2"
+                style="padding-left: 9px;padding-right: 9px;background-color: #f2f2f2;">
+                <div class="oldwebkit" style="max-width: 570px;">
+                    <table width="570" border="0" cellpadding="0" cellspacing="9" class="vb-container halfpad"
+                           bgcolor="#ffffff"
+                           style="border-collapse: separate;border-spacing: 9px;padding-left: 9px;padding-right: 9px;width: 100%;max-width: 570px;background-color: #fff;">
+                        <tbody>
+                        <tr>
+                            <td bgcolor="#ffffff" align="center"
+                                style="background-color: #ffffff; font-size: 22px; font-family: Verdana, Geneva, sans-serif; color: #3f3f3f; text-align: center;">
+                                <span>Bonjour {{ user.username }} !</span></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table class="vb-outer" width="100%" cellpadding="0" border="0" cellspacing="0" bgcolor="#f2f2f2"
+           style="background-color: #f2f2f2;" id="ko_textBlock_6">
+        <tbody>
+        <tr>
+            <td class="vb-outer" align="center" valign="top" bgcolor="#f2f2f2"
+                style="padding-left: 9px;padding-right: 9px;background-color: #f2f2f2;">
+                <div class="oldwebkit" style="max-width: 570px;">
+                    <table width="570" border="0" cellpadding="0" cellspacing="18" class="vb-container fullpad"
+                           bgcolor="#ffffff"
+                           style="border-collapse: separate;border-spacing: 18px;padding-left: 0;padding-right: 0;width: 100%;max-width: 570px;background-color: #fff;">
+                        <tbody>
+                        <tr>
+                            <td align="left" class="long-text links-color"
+                                style="text-align: left; font-size: 13px; font-family: Verdana, Geneva, sans-serif; color: #3f3f3f;">
+                                <p style="margin: 1em 0px;margin-bottom: 0px;margin-top: 0px;text-align: center;"
+                                   data-mce-style="text-align: center;">Pour valider votre compte utilisateur, merci
+                                    de cliquer sur ce bouton.</p></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table class="vb-outer" width="100%" cellpadding="0" border="0" cellspacing="0" bgcolor="#f2f2f2"
+           style="background-color: #f2f2f2;" id="ko_buttonBlock_7">
+        <tbody>
+        <tr>
+            <td class="vb-outer" align="center" valign="top" bgcolor="#f2f2f2"
+                style="padding-left: 9px;padding-right: 9px;background-color: #f2f2f2;">
+                <div class="oldwebkit" style="max-width: 570px;">
+                    <table width="570" border="0" cellpadding="0" cellspacing="18" class="vb-container fullpad"
+                           bgcolor="#ffffff"
+                           style="border-collapse: separate;border-spacing: 18px;padding-left: 0;padding-right: 0;width: 100%;max-width: 570px;background-color: #fff;">
+                        <tbody>
+                        <tr>
+                            <td valign="top" bgcolor="#ffffff" align="center" style="background-color: #ffffff;">
+                                <table cellpadding="0" border="0" align="center" cellspacing="0" class="mobile-full">
+                                    <tbody>
+                                    <tr>
+                                        <td width="auto" valign="middle" bgcolor="#ffff99" align="center" height="50"
+                                            style="font-size: 22px; font-family: Arial Black, Arial Black, Gadget, sans-serif; color: #9e639a; font-weight: normal; padding-left: 14px; padding-right: 14px; background-color: #ffff99; border-radius: 4px;">
+                                            <a target="_new" href="{{ confirmationUrl }}"
+                                               style="text-decoration: none; color: #9e639a; font-weight: normal;">VALIDER MON INSCRIPTION</a></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table class="vb-outer" width="100%" cellpadding="0" border="0" cellspacing="0" bgcolor="#f2f2f2"
+           style="background-color: #f2f2f2;" id="ko_textBlock_8">
+        <tbody>
+        <tr>
+            <td class="vb-outer" align="center" valign="top" bgcolor="#f2f2f2"
+                style="padding-left: 9px;padding-right: 9px;background-color: #f2f2f2;">
+                <div class="oldwebkit" style="max-width: 570px;">
+                    <table width="570" border="0" cellpadding="0" cellspacing="18" class="vb-container fullpad"
+                           bgcolor="#ffffff"
+                           style="border-collapse: separate;border-spacing: 18px;padding-left: 0;padding-right: 0;width: 100%;max-width: 570px;background-color: #fff;">
+                        <tbody>
+                        <tr>
+                            <td align="left" class="long-text links-color"
+                                style="text-align: left; font-size: 13px; font-family: Verdana, Geneva, sans-serif; color: #3f3f3f;">
+                                <p style="margin: 1em 0px;margin-top: 0px;text-align: center;"
+                                   data-mce-style="text-align: center;">Vous pourrez ensuite vous connecter à Caca$h, et
+                                    gérer vos comptes en ligne.</p>
+                                <p style="margin: 1em 0px;margin-bottom: 0px;text-align: center;"
+                                   data-mce-style="text-align: center;">Cordialement,<br>L'équipe de Caca$h.</p></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+{% endblock %}

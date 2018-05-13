@@ -20,3 +20,29 @@ body {
 .content {
   padding: 20px;
 }
+
+.info,
+form.style-error ul li {
+  padding: 5px 10px;
+}
+
+.info.error,
+form.style-error ul li {
+  color: $error;
+  border: 1px solid $error;
+  background: $lightError;
+}
+
+.info {
+  &.success {
+    color: $success;
+    border: 1px solid $success;
+    background: $lightSuccess;
+  }
+
+  &.warning {
+    color: $warning;
+    border: 1px solid $warning;
+    background: $lightWarning;
+  }
+}

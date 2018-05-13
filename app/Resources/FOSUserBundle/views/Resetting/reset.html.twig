@@ -1,0 +1,26 @@
+{% extends "base.html.twig" %}
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block title %}Réinitialiser mon mot de passe{% endblock title %}
+
+{% block body %}
+    <div class="row">
+        <div class="col s12 m6 offset-m3 l6 offset-l3 xl4 offset-xl4">
+            <div class="card">
+                <div class="card-image">
+                    <img src="{{ asset('images/card/cacash.jpg') }}">
+                </div>
+                {{ form_start(form, { 'action': path('fos_user_resetting_reset', {'token': token}), 'attr': { 'class': 'fos_user_resetting_reset style-error' } }) }}
+                <div class="card-content">
+                    {{ form_widget(form) }}
+                </div>
+                <div class="card-action">
+                    <button class="btn waves-effect waves-light" type="submit" id="_submit" name="_submit">{{ 'resetting.reset.submit'|trans }}
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock body %}
