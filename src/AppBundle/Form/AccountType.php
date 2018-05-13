@@ -31,7 +31,7 @@ class AccountType extends AbstractType
                 'required' => false,
             ])
             ->add('save', SubmitType::class, [
-                'label' => 'Créer un nouveau compte',
+                'label' => 'Enregistrer le compte',
             ])
         ;
     }

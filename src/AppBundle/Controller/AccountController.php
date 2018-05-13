@@ -95,6 +95,51 @@ class AccountController extends Controller
     }
 
     /**
+     * @Route("/account/edit/{slug}-{id}.html", name="edit_account",
+     *      requirements={
+     *          "id": "\d+",
+     *          "slug": "[a-z0-9\-]+"
+     *      }
+     * )
+     *
+     * @ParamConverter("id", class="AppBundle:Account")
+     *
+     * @param Account $account
+     * @param Request $request
+     *
+     * @return RedirectResponse|Response
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function editAccountAction(Account $account, Request $request)
+    {
+        if ($this->getUser() !== $account->getUser()) {
+            throw $this->createAccessDeniedException('You cannot access to this account.');
+        }
+
+        $form = $this->createForm(AccountType::class, $account);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $account = $form->getData();
+
+            $this->accountRepository->save($account);
+
+            $this->addFlash(
+                'notice',
+                'Compte '.$account->getName().' édité avec succès.'
+            );
+        }
+
+        return $this->render('account/edit.html.twig', array(
+            'account' => $account,
+            'form' => $form->createView(),
+        ));
+    }
+
+    /**
      * @Route("/accounts/list", name="list_accounts")
      *
      * @return Response
