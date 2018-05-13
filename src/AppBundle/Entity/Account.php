@@ -42,6 +42,13 @@ class Account
     private $slug;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="balance", type="integer")
+     */
+    private $balance;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="starred", type="boolean")
@@ -129,6 +136,30 @@ class Account
     public function getSlug()
     {
         return $this->slug;
+    }
+
+    /**
+     * Set balance.
+     *
+     * @param int $balance
+     *
+     * @return Account
+     */
+    public function setBalance($balance)
+    {
+        $this->balance = $balance;
+
+        return $this;
+    }
+
+    /**
+     * Get balance.
+     *
+     * @return int
+     */
+    public function getBalance()
+    {
+        return $this->balance;
     }
 
     /**

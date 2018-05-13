@@ -9,8 +9,7 @@
 
     <div class="collection">
         {% for account in accounts %}
-            {# TODO DISPLAY BALANCE #}
-            <a href="{{ path('account', { 'slug': account.slug, 'id': account.id }) }}" class="collection-item">{{ account.name }}</a>
+            <a href="{{ path('account', { 'slug': account.slug, 'id': account.id }) }}" class="collection-item">{{ account.name }}<span class="secondary-content">{{ account.balance|price }}</span></a>
         {% endfor %}
     </div>
 {% endif %}
