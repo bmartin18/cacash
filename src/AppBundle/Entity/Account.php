@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -44,7 +46,7 @@ class Account
     /**
      * @var int
      *
-     * @ORM\Column(name="balance", type="integer")
+     * @ORM\Column(name="balance", type="integer", nullable=true)
      */
     private $balance;
 
@@ -78,6 +80,19 @@ class Account
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     private $user;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Transaction", cascade={"persist"}, mappedBy="account")
+     */
+    private $transactions;
+
+    /**
+     * Account constructor.
+     */
+    public function __construct()
+    {
+        $this->transactions = new ArrayCollection();
+    }
 
 
     /**
@@ -141,11 +156,11 @@ class Account
     /**
      * Set balance.
      *
-     * @param int $balance
+     * @param int|null $balance
      *
      * @return Account
      */
-    public function setBalance($balance)
+    public function setBalance($balance = null)
     {
         $this->balance = $balance;
 
@@ -155,7 +170,7 @@ class Account
     /**
      * Get balance.
      *
-     * @return int
+     * @return int|null
      */
     public function getBalance()
     {
@@ -256,5 +271,41 @@ class Account
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Add transaction.
+     *
+     * @param Transaction $transaction
+     *
+     * @return Account
+     */
+    public function addTransaction(Transaction $transaction)
+    {
+        $this->transactions[] = $transaction;
+
+        return $this;
+    }
+
+    /**
+     * Remove transaction.
+     *
+     * @param Transaction $transaction
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeTransaction(Transaction $transaction)
+    {
+        return $this->transactions->removeElement($transaction);
+    }
+
+    /**
+     * Get transactions.
+     *
+     * @return Collection
+     */
+    public function getTransactions()
+    {
+        return $this->transactions;
     }
 }
