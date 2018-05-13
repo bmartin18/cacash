@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Account;
 use AppBundle\Form\AccountType;
 use AppBundle\Repository\AccountRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -27,6 +28,31 @@ class AccountController extends Controller
     public function __construct(AccountRepository $accountRepository)
     {
         $this->accountRepository = $accountRepository;
+    }
+
+    /**
+     * @Route("/account/{slug}-{id}.html", name="account",
+     *      requirements={
+     *          "id": "\d+",
+     *          "slug": "[a-z0-9\-]+"
+     *      }
+     * )
+     *
+     * @ParamConverter("id", class="AppBundle:Account")
+     *
+     * @param Account $account
+     *
+     * @return Response
+     */
+    public function accountAction(Account $account)
+    {
+        if ($this->getUser() !== $account->getUser()) {
+            throw $this->createAccessDeniedException('You cannot access to this account.');
+        }
+
+        return $this->render('account/index.html.twig', array(
+            'account' => $account,
+        ));
     }
 
     /**
@@ -65,6 +91,18 @@ class AccountController extends Controller
 
         return $this->render('account/create.html.twig', array(
             'form' => $form->createView(),
+        ));
+    }
+
+    /**
+     * @Route("/accounts/list", name="list_accounts")
+     *
+     * @return Response
+     */
+    public function listAccountsAction()
+    {
+        return $this->render('account/list.html.twig', array(
+            'accounts' => $this->getUser()->getAccounts(),
         ));
     }
 }

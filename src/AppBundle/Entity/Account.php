@@ -37,7 +37,7 @@ class Account
      *
      * @ORM\Column(name="slug", type="string", length=255)
      *
-     * @Gedmo\Slug(fields={"name"})
+     * @Gedmo\Slug(fields={"name"}, unique=false)
      */
     private $slug;
 

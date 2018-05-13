@@ -1,0 +1,16 @@
+{% if accounts %}
+    <h4 class="light">Mes comptes</h4>
+
+    {% for flash_message in app.session.flashBag.get('notice') %}
+        <div class="info success">
+            {{ flash_message }}
+        </div>
+    {% endfor %}
+
+    <div class="collection">
+        {% for account in accounts %}
+            {# TODO DISPLAY BALANCE #}
+            <a href="{{ path('account', { 'slug': account.slug, 'id': account.id }) }}" class="collection-item">{{ account.name }}</a>
+        {% endfor %}
+    </div>
+{% endif %}
