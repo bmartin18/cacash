@@ -1,9 +1,11 @@
 #comp-header {
   background: rgba(255, 230, 0, 0.55);
-}
-#comp-header ul li a {
-  color: $secondary-color;
-}
-#comp-header ul li a:hover {
-  background: $primary-color;
+
+  ul li a {
+    color: $secondary-color;
+
+    &:hover {
+      background: $primary-color;
+    }
+  }
 }

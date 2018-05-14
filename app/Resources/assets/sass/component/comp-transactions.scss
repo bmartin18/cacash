@@ -1,0 +1,16 @@
+table.comp-transactions {
+  tbody tr {
+    &:hover {
+      cursor: pointer;
+      background: $secondary-color-light;
+    }
+
+    &.credit {
+      color: $secondary-color-dark;
+
+      .amount {
+        font-weight: bold;
+      }
+    }
+  }
+}

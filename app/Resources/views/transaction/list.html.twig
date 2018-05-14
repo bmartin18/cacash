@@ -1,0 +1,25 @@
+{% if transactions %}
+    <table class="striped comp-transactions">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th class="hide-on-med-and-down">ID</th>
+                <th>Label</th>
+                <th class="center-align hide-on-med-and-down">Pointage</th>
+                <th class="right-align">Montant</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for transaction in transactions %}
+                <tr class="{% if not transaction.debit %}credit{% endif %}">
+                    <td>{% if transaction.transactionAt %}{{ transaction.transactionAt|date('d/m/Y') }}{% endif %}</td>
+                    <td class="hide-on-med-and-down">{{ transaction.hash }}</td>
+                    <td>{{ transaction.description }}</td>
+                    <td class="center-align hide-on-med-and-down">{% if transaction.checked %}✓{% endif %}</td>
+                    <td class="right-align amount">{{ transaction.amount|price }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}

@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Transaction
  *
- * @ORM\Table(name="transaction")
+ * @ORM\Table(name="transaction", indexes={@ORM\Index(name="order_by_date", columns={"transaction_at"})})
  * @ORM\Entity(repositoryClass="AppBundle\Repository\TransactionRepository")
  */
 class Transaction

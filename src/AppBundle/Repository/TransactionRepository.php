@@ -24,6 +24,23 @@ class TransactionRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param Account $account
+     *
+     * @return mixed
+     */
+    public function getTransactions(Account $account)
+    {
+        return $this
+            ->createQueryBuilder('t')
+            ->where('t.account = :account')
+            ->setParameter('account', $account)
+            ->orderBy('t.transactionAt', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
      * @param Transaction $transaction
      *
      * @return Transaction

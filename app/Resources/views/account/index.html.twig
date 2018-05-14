@@ -4,8 +4,16 @@
 
 {% block body %}
     <div class="row">
-        <div class="col">
-            <p><a class="btn modal-trigger" href="#modal-transaction">Nouvelle transaction</a></p>
+        <div class="col s12">
+            <div class="card">
+                <div>
+                    {{ render(path('list_transactions', {'id': account.id})) }}
+                </div>
+                <div class="card-action">
+                    <a class="btn modal-trigger" href="#modal-transaction">Nouvelle transaction</a>
+                    <a class="btn disabled right">{{ account.balance|price }}</a>
+                </div>
+            </div>
         </div>
     </div>
 

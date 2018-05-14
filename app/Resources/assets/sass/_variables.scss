@@ -16,9 +16,11 @@ $lightError: rgba(255, 0, 0, 0.10);
 
 // materialize
 $primary-color: $primaryColor !default;
-$primary-color-light: lighten($primary-color, 15%) !default;
+$primary-color-light: lighten($primary-color, 30%) !default;
 $primary-color-dark: darken($primary-color, 15%) !default;
 
 $secondary-color: $secondaryColor !default;
+$secondary-color-light: lighten($secondary-color, 30%) !default;
+$secondary-color-dark: darken($secondary-color, 15%) !default;
 
 $input-margin: 0;

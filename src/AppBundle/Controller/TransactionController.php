@@ -32,12 +32,11 @@ class TransactionController extends Controller
     }
 
     /**
-     * @Route("/transaction/{id}/create", name="create_transaction",
+     * @Route("/transaction/account-{id}/create", name="create_transaction",
      *      requirements={
      *          "id": "\d+",
      *      }
      * )
-     *
      *
      * @ParamConverter("id", class="AppBundle:Account")
      *
@@ -74,6 +73,31 @@ class TransactionController extends Controller
 
         return $this->render('transaction/form.html.twig', array(
             'form' => $form->createView(),
+        ));
+    }
+
+    /**
+     * @Route("/transactions/list/account-{id}", name="list_transactions",
+     *      requirements={
+     *          "id": "\d+",
+     *      }
+     * )
+     *
+     * @ParamConverter("id", class="AppBundle:Account")
+     *
+     * @param Account $account
+     *
+     * @return Response
+     */
+    public function listTransactionsAction(Account $account)
+    {
+        $transactions = $this
+            ->transactionRepository
+            ->getTransactions($account)
+        ;
+
+        return $this->render('transaction/list.html.twig', array(
+            'transactions' => $transactions,
         ));
     }
 }
