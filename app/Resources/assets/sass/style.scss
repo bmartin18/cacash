@@ -47,3 +47,28 @@ form.style-error ul li {
     background: $lightWarning;
   }
 }
+
+// Scrollbar
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: $secondary-color;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: $secondary-color-dark;
+}
+
+::-webkit-scrollbar-track {
+  background-color: $secondary-color-light;
+}
+
+::-webkit-scrollbar-track:hover {
+  background-color: $secondary-color-light;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+}
