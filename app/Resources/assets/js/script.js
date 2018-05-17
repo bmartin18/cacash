@@ -1,7 +1,9 @@
-import $ from "jquery";
+let $ = require("jquery");
 
-import hammerjs from "hammerjs";
-import materialize from "materialize-css";
+let hammerjs = require("hammerjs");
+let materialize = require("materialize-css");
+
+require("./component/transactions");
 
 $( document ).ready( function() {
     $( ".dropdown-button" ).dropdown();
