@@ -1,5 +1,3 @@
-let $ = require( "jquery" );
-
 let Transactions = function() {
     "use strict";
 
@@ -12,17 +10,51 @@ let Transactions = function() {
             return;
         }
 
-        resizeTable();
+        let lastRow = 0;
 
-        $( window ).resize( function() {
-            resizeTable();
+        let dataTable = $container.DataTable( {
+            "ajax": $container.data( "list" ),
+            "deferRender": true,
+            "scroller": true,
+            "scrollY": $(window).height() - 340 + "px",
+            "scrollCollapse": true,
+            "ordering": false,
+            "pageLength": 100,
+            "columnDefs": [
+                { "className": "hide-on-med-and-down", "targets": [ 1 ] },
+                { "className": "center-align hide-on-med-and-down", "targets": [ 3 ] },
+                { "className": "amount right-align", "targets": [ 4 ] }
+            ],
+            "language": {
+                "sProcessing":     "Traitement en cours...",
+                "sSearch":         "Rechercher",
+                "sInfo":           "Transactions _START_ à _END_ sur _TOTAL_",
+                "sInfoEmpty":      "",
+                "sInfoFiltered":   "",
+                "sInfoPostFix":    "",
+                "sLoadingRecords": "Chargement en cours...",
+                "sZeroRecords":    "Aucun résultat",
+                "sEmptyTable":     "Aucune transaction",
+            },
+            "createdRow": function (row, data) {
+                if ( data[4].charAt(0) !== "-" ) {
+                    $( row ).addClass( "credit" );
+                }
+            },
+            "initComplete": function(settings, json) {
+                lastRow = json.data.length - 1;
+
+                dataTable.row( lastRow ).scrollTo();
+            }
         } );
-    };
 
-    let resizeTable = function() {
-        let height = $(window).height() - 260;
+        $( "#search" ).keyup( function() {
+            dataTable.search( $( this ).val() ).draw();
 
-        $( "tbody", $container ).css( "height", height + "px");
+            if ( $( this ).val() === "" ) {
+                dataTable.row( lastRow ).scrollTo( false );
+            }
+        });
     };
 
     $( function() {

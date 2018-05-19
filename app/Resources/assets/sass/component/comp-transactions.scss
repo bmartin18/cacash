@@ -3,16 +3,7 @@ table.comp-transactions {
     padding: 5px;
   }
 
-  thead, tbody tr {
-    display: table;
-    table-layout: fixed;
-    width: 100%;
-  }
-
   tbody {
-    display: block;
-    overflow: auto;
-
     tr {
       &:hover {
         cursor: pointer;

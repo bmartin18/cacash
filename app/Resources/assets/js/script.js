@@ -1,7 +1,10 @@
-let $ = require("jquery");
+let $ = require( "jquery" );
 
-let hammerjs = require("hammerjs");
-let materialize = require("materialize-css");
+let hammerjs = require( "hammerjs" );
+let materialize = require( "materialize-css" );
+
+let dt = require( "datatables.net" )( window, $ );
+require( "datatables.net-scroller" )( window, $ );
 
 require("./component/transactions");
 

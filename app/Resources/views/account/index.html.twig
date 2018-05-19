@@ -5,15 +5,19 @@
 {% block body %}
     <div class="row">
         <div class="col s12">
-            <a class="btn right" href="{{ path('edit_account', {'id': account.id, 'slug': account.slug}) }}">Paramètres du compte</a>
+            <a class="btn right" href="{{ path('edit_account', {'id': account.id, 'slug': account.slug}) }}"><i class="material-icons left">settings</i>Paramètres</a>
         </div>
         <div class="col s12">
             <div class="card">
+                <div class="col s12 input-field">
+                    <input id="search" type="text" autocomplete="off">
+                    <label for="search">Rechercher</label>
+                </div>
                 <div>
                     {{ render(path('list_transactions', {'id': account.id})) }}
                 </div>
                 <div class="card-action">
-                    <a class="btn modal-trigger" href="#modal-transaction">Nouvelle transaction</a>
+                    <a class="btn modal-trigger" href="#modal-transaction"><i class="material-icons left">add_circle</i>Transaction</a>
                     <a class="btn disabled right">{{ account.balance|price }}</a>
                 </div>
             </div>

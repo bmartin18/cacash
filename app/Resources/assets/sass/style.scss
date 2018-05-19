@@ -22,6 +22,10 @@ body {
   padding: 20px;
 }
 
+.card-action .row {
+  margin-bottom: 0;
+}
+
 .info,
 form.style-error ul li {
   padding: 5px 10px;
@@ -71,4 +75,15 @@ form.style-error ul li {
 
 ::-webkit-scrollbar {
   width: 12px;
+}
+
+// DataTable
+.dataTables_info {
+  margin-left: 5px;
+}
+
+.dataTables_length,
+.dataTables_filter,
+.dataTables_paginate {
+  display:none;
 }

@@ -11,6 +11,7 @@ use AppBundle\Repository\TransactionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -100,14 +101,45 @@ class TransactionController extends Controller
      */
     public function listTransactionsAction(Account $account)
     {
+        return $this->render('transaction/list.html.twig', [
+            'account' => $account,
+        ]);
+    }
+
+    /**
+     * @Route("/transactions/list/account-{id}.json", name="list_json_transactions",
+     *      requirements={
+     *          "id": "\d+",
+     *      }
+     * )
+     *
+     * @ParamConverter("id", class="AppBundle:Account")
+     *
+     * @param Account $account
+     *
+     * @return Response
+     */
+    public function listJsonTransactionsAction(Account $account)
+    {
         $transactions = $this
             ->transactionRepository
             ->getTransactions($account)
         ;
 
-        return $this->render('transaction/list.html.twig', array(
-            'transactions' => $transactions,
-        ));
+        $json = array();
+
+        /** @var Transaction $transaction */
+        foreach ($transactions as $transaction) {
+            $json['data'][] = [
+                $transaction->getTransactionAt() ? $transaction->getTransactionAt()->format('d/m/Y') : null,
+                $transaction->getHash(),
+                $transaction->getDescription(),
+                $transaction->isChecked() ? '✓' : null,
+                number_format($transaction->getAmount() / 100, 2, ',', ' ').'€',
+            ];
+        }
+
+        return new JsonResponse($json);
     }
 
     /**
@@ -122,7 +154,10 @@ class TransactionController extends Controller
      * @param Account $account
      * @param Request $request
      *
-     * @return Response
+     * @return RedirectResponse|Response
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function importTransactionsAction(Account $account, Request $request)
     {

@@ -53,7 +53,7 @@ class TransactionType extends AbstractType
                 'required' => false,
             ])
             ->add('save', SubmitType::class, [
-                'label' => 'Enregistrer la transaction',
+                'label' => 'Enregistrer',
             ])
         ;
     }
