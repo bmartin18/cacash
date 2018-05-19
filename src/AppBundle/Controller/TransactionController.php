@@ -6,6 +6,7 @@ use AppBundle\Entity\Account;
 use AppBundle\Entity\Transaction;
 use AppBundle\Form\ImportTransactionType;
 use AppBundle\Form\TransactionType;
+use AppBundle\Helper\ImportTransactionsHelper;
 use AppBundle\Repository\TransactionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -22,14 +23,21 @@ class TransactionController extends Controller
     /** @var TransactionRepository */
     private $transactionRepository;
 
+    /** @var ImportTransactionsHelper */
+    private $importTransactionsHelper;
+
     /**
      * TransactionController constructor.
      *
-     * @param TransactionRepository $transactionRepository
+     * @param TransactionRepository    $transactionRepository
+     * @param ImportTransactionsHelper $importTransactionsHelper
      */
-    public function __construct(TransactionRepository $transactionRepository)
-    {
+    public function __construct(
+        TransactionRepository $transactionRepository,
+        ImportTransactionsHelper $importTransactionsHelper
+    ) {
         $this->transactionRepository = $transactionRepository;
+        $this->importTransactionsHelper = $importTransactionsHelper;
     }
 
     /**
@@ -130,6 +138,11 @@ class TransactionController extends Controller
 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
+                $this
+                    ->importTransactionsHelper
+                    ->importFromQif($form->get('file')->getData(), $account)
+                ;
+
                 return $this->redirectToRoute('account', ['id' => $account->getId(), 'slug' => $account->getSlug()]);
             } else {
                 $this->addFlash(

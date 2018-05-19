@@ -20,7 +20,7 @@ let Transactions = function() {
     };
 
     let resizeTable = function() {
-        let height = $(window).height() - 235;
+        let height = $(window).height() - 260;
 
         $( "tbody", $container ).css( "height", height + "px");
     };

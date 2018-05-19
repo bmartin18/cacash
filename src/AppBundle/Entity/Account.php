@@ -82,7 +82,7 @@ class Account
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="Transaction", cascade={"persist"}, mappedBy="account")
+     * @ORM\OneToMany(targetEntity="Transaction", cascade={"remove"}, mappedBy="account")
      */
     private $transactions;
 

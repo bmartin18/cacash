@@ -44,14 +44,14 @@ class Transaction
      *
      * @ORM\Column(name="checked", type="boolean")
      */
-    private $checked;
+    private $checked = false;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="pool", type="boolean")
      */
-    private $pool;
+    private $pool = false;
 
     /**
      * @var int
