@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Account;
 use AppBundle\Entity\Transaction;
+use AppBundle\Form\ImportTransactionType;
 use AppBundle\Form\TransactionType;
 use AppBundle\Repository\TransactionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -99,5 +100,49 @@ class TransactionController extends Controller
         return $this->render('transaction/list.html.twig', array(
             'transactions' => $transactions,
         ));
+    }
+
+    /**
+     * @Route("/transactions/import/account-{id}", name="import_transactions",
+     *      requirements={
+     *          "id": "\d+",
+     *      }
+     * )
+     *
+     * @ParamConverter("id", class="AppBundle:Account")
+     *
+     * @param Account $account
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function importTransactionsAction(Account $account, Request $request)
+    {
+        if ($this->getUser() !== $account->getUser()) {
+            throw $this->createAccessDeniedException('You cannot access to this account.');
+        }
+
+        $form = $this->createForm(ImportTransactionType::class, null, array(
+            'action' => $this->generateUrl('import_transactions', ['id' => $account->getId()]),
+        ));
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                return $this->redirectToRoute('account', ['id' => $account->getId(), 'slug' => $account->getSlug()]);
+            } else {
+                $this->addFlash(
+                    'error',
+                    'Erreur lors de l\'import.'
+                );
+
+                return $this->redirectToRoute('edit_account', ['id' => $account->getId(), 'slug' => $account->getSlug()]);
+            }
+        }
+
+        return $this->render('transaction/import.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }

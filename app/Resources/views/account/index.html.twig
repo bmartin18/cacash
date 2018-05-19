@@ -5,6 +5,9 @@
 {% block body %}
     <div class="row">
         <div class="col s12">
+            <a class="btn right" href="{{ path('edit_account', {'id': account.id, 'slug': account.slug}) }}">Paramètres du compte</a>
+        </div>
+        <div class="col s12">
             <div class="card">
                 <div>
                     {{ render(path('list_transactions', {'id': account.id})) }}

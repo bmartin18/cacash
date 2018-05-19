@@ -12,4 +12,13 @@
             {{ flash_message }}
         </div>
     {% endfor %}
+
+    {{ render(path('import_transactions', {'id': account.id})) }}
+
+    {% for flash_message in app.session.flashBag.get('error') %}
+        <div class="info error">
+            {{ flash_message }}
+        </div>
+    {% endfor %}
+
 {% endblock %}
