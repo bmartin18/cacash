@@ -26,3 +26,27 @@ table.comp-transactions {
     }
   }
 }
+
+div.comp-transactions {
+  .dataTables_info {
+    font-size: 0.8em;
+    margin-left: 5px;
+  }
+
+  .dt-buttons {
+    margin: 5px;
+  }
+
+  .card-action {
+    input {
+      margin-top: -14px;
+    }
+
+    .balance {
+      margin-top: 10px;
+      font-weight: bold;
+      color: black !important;
+      background-color: $primary-color-light !important;
+    }
+  }
+}

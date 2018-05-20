@@ -5,6 +5,7 @@
     "babelify": "^8.0.0",
     "browserify": "^16.2.2",
     "datatables.net": "^1.10.16",
+    "datatables.net-buttons": "^1.5.1",
     "datatables.net-scroller": "^1.4.4",
     "datatables.net-select": "^1.2.5",
     "del": "^3.0.0",

@@ -13,6 +13,7 @@ let Transactions = function() {
         let lastRow = 0;
 
         let dataTable = $container.DataTable( {
+            "dom": 'tiB',
             "ajax": $container.data( "list" ),
             "deferRender": true,
             "scroller": true,
@@ -24,6 +25,31 @@ let Transactions = function() {
                 "style": "os",
                 "blurable": true
             },
+            "buttons": [
+                {
+                    "text": "<i class=\"material-icons left\">add</i>Transaction",
+                    "className": "btn",
+                    "action": function ( e, dt, node, config ) {
+                        $( "#modal-transaction" ).modal( "open" );
+                    }
+                },
+                {
+                    "text": "<i class=\"material-icons left\">edit</i>Modifier",
+                    "className": "btn",
+                    "enabled": false,
+                    "action": function ( e, dt, node, config ) {
+
+                    }
+                },
+                {
+                    "text": "<i class=\"material-icons left\">check</i>Pointer",
+                    "className": "btn",
+                    "enabled": false,
+                    "action": function ( e, dt, node, config ) {
+
+                    }
+                }
+            ],
             "columnDefs": [
                 { "className": "hide-on-med-and-down", "targets": [ 1 ] },
                 { "className": "center-align hide-on-med-and-down", "targets": [ 3 ] },
@@ -66,6 +92,15 @@ let Transactions = function() {
                 dataTable.row( lastRow ).scrollTo( false );
             }
         });
+
+        let countSelectedRows = 0;
+
+        dataTable.on( "select deselect", function () {
+            countSelectedRows = dataTable.rows( { selected: true } ).count();
+
+            dataTable.button( 1 ).enable( countSelectedRows === 1 );
+            dataTable.button( 2 ).enable( countSelectedRows > 0 );
+        } );
     };
 
     $( function() {
