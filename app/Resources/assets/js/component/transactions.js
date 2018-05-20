@@ -64,7 +64,7 @@ let Transactions = function() {
 
                         $( data ).each( function() {
                             $.get( $container.data( "check" ) + "/" + this[ "id" ], function() {
-                                dataTable.ajax.reload(null, false);
+                                reloadDataTable();
                             });
                         } );
                     }
@@ -104,6 +104,12 @@ let Transactions = function() {
                 dataTable.row( lastRow ).scrollTo();
             }
         } );
+
+        let reloadDataTable = function() {
+            dataTable.ajax.reload(function ( json ) {
+                $( ".balance" ).html( json.balance );
+            }, false);
+        };
 
         $( "#search" ).keyup( function() {
             dataTable.search( $( this ).val() ).draw();
@@ -145,7 +151,7 @@ let Transactions = function() {
 
                 $.post( $( this ).data( "action" ), $( this ).serialize(), function(response) {
                     if (response.success) {
-                        dataTable.ajax.reload(null, false);
+                        reloadDataTable();
                         $( "#modal-transaction" ).modal( "close" );
                     }
                 }, 'JSON');

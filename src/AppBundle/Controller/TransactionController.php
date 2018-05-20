@@ -196,6 +196,8 @@ class TransactionController extends Controller
                 'checked' => $transaction->isChecked() ? '✓' : null,
                 'amount' => number_format($transaction->getAmount() / 100, 2, ',', ' ').'€',
             ];
+
+            $json['balance'] = number_format($account->getBalance() / 100, 2, ',', ' ').'€';
         }
 
         return new JsonResponse($json);
