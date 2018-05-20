@@ -35,8 +35,12 @@ let Transactions = function() {
             },
             "buttons": [
                 {
-                    "text": "<i class=\"material-icons left\">add</i>Transaction",
+                    "text": "<i class=\"material-icons left\">add</i><span class='hide-on-med-and-down'><u>N</u>ouveau</span>",
                     "className": "btn",
+                    "key": {
+                        "key": "n",
+                        "shiftKey": true
+                    },
                     "action": function ( e, dt, node, config ) {
                         $.get( $( "#modal" ).data( "create" ), function(response) {
                             initFormTransaction( response );
@@ -44,9 +48,13 @@ let Transactions = function() {
                     }
                 },
                 {
-                    "text": "<i class=\"material-icons left\">edit</i>Modifier",
+                    "text": "<i class=\"material-icons left\">edit</i><span class='hide-on-med-and-down'><u>M</u>odifier</span>",
                     "className": "btn",
                     "enabled": false,
+                    "key": {
+                        "key": "m",
+                        "shiftKey": true
+                    },
                     "action": function ( e, dt, node, config ) {
                         let id = dataTable.rows( { selected: true } ).data()[0][ "id" ];
 
@@ -56,28 +64,36 @@ let Transactions = function() {
                     }
                 },
                 {
-                    "text": "<i class=\"material-icons left\">delete</i>Supprimer",
+                    "text": "<i class=\"material-icons left\">check</i><span class='hide-on-med-and-down'><u>P</u>ointer</span>",
                     "className": "btn",
                     "enabled": false,
+                    "key": {
+                        "key": "p",
+                        "shiftKey": true
+                    },
                     "action": function ( e, dt, node, config ) {
                         let data = dataTable.rows( { selected: true } ).data();
 
                         $( data ).each( function() {
-                            $.get( $container.data( "delete" ) + "/" + this[ "id" ], function() {
+                            $.get( $container.data( "check" ) + "/" + this[ "id" ], function() {
                                 reloadDataTable();
                             });
                         } );
                     }
                 },
                 {
-                    "text": "<i class=\"material-icons left\">check</i>Pointer",
-                    "className": "btn",
+                    "text": "<i class=\"material-icons left\">delete</i><span class='hide-on-med-and-down'><u>S</u>upprimer</span>",
+                    "className": "btn right red",
                     "enabled": false,
+                    "key": {
+                        "key": "s",
+                        "shiftKey": true
+                    },
                     "action": function ( e, dt, node, config ) {
                         let data = dataTable.rows( { selected: true } ).data();
 
                         $( data ).each( function() {
-                            $.get( $container.data( "check" ) + "/" + this[ "id" ], function() {
+                            $.get( $container.data( "delete" ) + "/" + this[ "id" ], function() {
                                 reloadDataTable();
                             });
                         } );
