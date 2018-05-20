@@ -35,10 +35,6 @@ class TransactionType extends AbstractType
                 'label' => 'Pointage',
                 'required' => false,
             ])
-            ->add('pool', CheckboxType::class, [
-                'label' => 'Cagnotte',
-                'required' => false,
-            ])
             ->add('amountDisplayable', IntegerType::class, [
                 'label' => 'Montant',
                 'required' => true,

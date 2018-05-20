@@ -47,13 +47,6 @@ class Transaction
     private $checked = false;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="pool", type="boolean")
-     */
-    private $pool = false;
-
-    /**
      * @var int
      *
      * @ORM\Column(name="amount", type="integer")
@@ -172,30 +165,6 @@ class Transaction
     public function isChecked()
     {
         return $this->checked;
-    }
-
-    /**
-     * Set pool.
-     *
-     * @param bool $pool
-     *
-     * @return Transaction
-     */
-    public function setPool($pool)
-    {
-        $this->pool = $pool;
-
-        return $this;
-    }
-
-    /**
-     * Get pool.
-     *
-     * @return bool
-     */
-    public function isPool()
-    {
-        return $this->pool;
     }
 
     /**
