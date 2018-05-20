@@ -2,7 +2,10 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Entity\Category;
 use AppBundle\Entity\Transaction;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -30,6 +33,24 @@ class TransactionType extends AbstractType
             ->add('description', TextType::class, [
                 'label' => 'Label',
                 'required' => true,
+            ])
+            ->add('category', EntityType::class, [
+                'label' => 'Catégorie',
+                'class' => Category::class,
+                'choice_label' => 'name',
+                'query_builder' => function (ServiceEntityRepository $er) {
+                    return $er->createQueryBuilder('c')
+                        ->leftJoin('c.parent', 'p')
+                        ->orderBy('p.name, c.name', 'ASC')
+                    ;
+                },
+                'group_by' => function ($category) {
+                    if (is_null($category->getParent())) {
+                        return "Catégories principales";
+                    }
+
+                    return $category->getParent()->getName();
+                },
             ])
             ->add('checked', CheckboxType::class, [
                 'label' => 'Pointage',

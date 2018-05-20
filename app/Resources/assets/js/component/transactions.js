@@ -254,6 +254,7 @@ let Transactions = function() {
 
             $( ".modal" ).modal();
             $( "#modal-transaction" ).modal( "open" );
+            $( "select" ).material_select();
             $( "#transaction_description" ).focus();
         };
 

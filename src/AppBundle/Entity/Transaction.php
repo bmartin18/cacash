@@ -84,6 +84,12 @@ class Transaction
      */
     private $account;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Category")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=true)
+     */
+    private $category;
+
 
     /**
      * Get id.
@@ -374,5 +380,29 @@ class Transaction
     public function getAccount()
     {
         return $this->account;
+    }
+
+    /**
+     * Set category.
+     *
+     * @param Category|null $category
+     *
+     * @return Transaction
+     */
+    public function setCategory(Category $category = null)
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * Get category.
+     *
+     * @return Category|null
+     */
+    public function getCategory()
+    {
+        return $this->category;
     }
 }

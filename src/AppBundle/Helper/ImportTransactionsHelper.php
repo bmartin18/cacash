@@ -3,7 +3,9 @@
 namespace AppBundle\Helper;
 
 use AppBundle\Entity\Account;
+use AppBundle\Entity\Category;
 use AppBundle\Entity\Transaction;
+use AppBundle\Repository\CategoryRepository;
 use AppBundle\Repository\TransactionRepository;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -15,14 +17,21 @@ class ImportTransactionsHelper
     /** @var TransactionRepository */
     private $transactionRepository;
 
+    /** @var CategoryRepository */
+    private $categoryRepository;
+
     /**
      * ImportTransactionsHelper constructor.
      *
      * @param TransactionRepository $transactionRepository
+     * @param CategoryRepository $categoryRepository
      */
-    public function __construct(TransactionRepository $transactionRepository)
-    {
+    public function __construct(
+        TransactionRepository $transactionRepository,
+        CategoryRepository $categoryRepository
+    ) {
         $this->transactionRepository = $transactionRepository;
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
@@ -80,7 +89,30 @@ class ImportTransactionsHelper
                     break;
 
                 case 'L':
-                    /* TODO CATEGORY */
+                    $content = trim($content);
+
+                    $categories = explode(':', $content);
+
+                    $parent = null;
+
+                    foreach ($categories as $category) {
+                        $cat = $this
+                            ->categoryRepository
+                            ->findOneBy(['name' => $category])
+                        ;
+
+                        if (!$cat) {
+                            $cat = new Category();
+                            $cat->setName($category);
+                            $cat->setParent($parent);
+
+                            $this->categoryRepository->save($cat);
+                        }
+
+                        $parent = $cat;
+                    }
+
+                    $transaction->setCategory($parent);
                     break;
 
                 case 'D':
