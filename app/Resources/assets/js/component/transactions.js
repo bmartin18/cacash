@@ -21,6 +21,14 @@ let Transactions = function() {
             "scrollCollapse": true,
             "ordering": false,
             "pageLength": 100,
+            "columns": [
+                { "data": "transactionAt" },
+                { "data": "hash" },
+                { "data": "description" },
+                { "data": "checked" },
+                { "data": "amount" }
+            ],
+            "rowId": "id",
             "select": {
                 "style": "os",
                 "blurable": true
@@ -40,7 +48,7 @@ let Transactions = function() {
                     "className": "btn",
                     "enabled": false,
                     "action": function ( e, dt, node, config ) {
-                        let id = dataTable.rows( { selected: true } ).data()[0][5];
+                        let id = dataTable.rows( { selected: true } ).data()[0][ "id" ];
 
                         $.get( $( "#modal" ).data( "edit" ) + "/" + id, function(response) {
                             initFormTransaction( response );
@@ -52,15 +60,20 @@ let Transactions = function() {
                     "className": "btn",
                     "enabled": false,
                     "action": function ( e, dt, node, config ) {
+                        let data = dataTable.rows( { selected: true } ).data();
 
+                        $( data ).each( function() {
+                            $.get( $container.data( "check" ) + "/" + this[ "id" ], function() {
+                                dataTable.ajax.reload(null, false);
+                            });
+                        } );
                     }
                 }
             ],
             "columnDefs": [
-                { "className": "hide-on-med-and-down", "targets": [ 1 ] },
-                { "className": "center-align hide-on-med-and-down", "targets": [ 3 ] },
-                { "className": "amount right-align", "targets": [ 4 ] },
-                { "className": "hide", "targets": [ 5 ] }
+                { "className": "hide-on-med-and-down", "targets": [ "hash" ] },
+                { "className": "center-align hide-on-med-and-down", "targets": [ "checked" ] },
+                { "className": "amount right-align", "targets": [ "amount" ] }
             ],
             "language": {
                 "sProcessing":     "Traitement en cours...",
@@ -81,7 +94,7 @@ let Transactions = function() {
                 }
             },
             "createdRow": function (row, data) {
-                if ( data[4].charAt(0) !== "-" ) {
+                if ( data[ "amount" ].charAt(0) !== "-" ) {
                     $( row ).addClass( "credit" );
                 }
             },

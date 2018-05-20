@@ -1,4 +1,7 @@
-<table class="striped comp-transactions js-transactions" data-list="{{ path('list_json_transactions', {'id': account.id}) }}">
+<table class="striped comp-transactions js-transactions"
+       data-list="{{ path('list_json_transactions', {'id': account.id}) }}"
+       data-check="{{ path('check_transaction') }}"
+>
     <thead>
         <tr>
             <th>Date</th>
@@ -6,7 +9,6 @@
             <th>Label</th>
             <th class="center-align hide-on-med-and-down">Pointage</th>
             <th class="right-align">Montant</th>
-            <th class="hide">id</th>
         </tr>
     </thead>
 </table>

@@ -108,6 +108,43 @@ class TransactionController extends Controller
     }
 
     /**
+     * @Route("/transaction/check/{id}", name="check_transaction")
+     *
+     * @param int $id
+     *
+     * @return JsonResponse
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function checkTransactionAction($id = null)
+    {
+        /** @var Transaction $transaction */
+        $transaction = $this
+            ->transactionRepository
+            ->find($id)
+        ;
+
+        if (!$transaction || $this->getUser() !== $transaction->getAccount()->getUser()) {
+            throw $this->createAccessDeniedException('You cannot access to this transaction.');
+        }
+
+        $transaction->setChecked(!$transaction->isChecked());
+
+        $this
+            ->transactionRepository
+            ->save($transaction)
+        ;
+
+        $json = [
+            'success' => true,
+            'id' => $transaction->getId(),
+        ];
+
+        return new JsonResponse($json);
+    }
+
+    /**
      * @Route("/transactions/list/account-{id}", name="list_transactions",
      *      requirements={
      *          "id": "\d+",
@@ -152,12 +189,12 @@ class TransactionController extends Controller
         /** @var Transaction $transaction */
         foreach ($transactions as $transaction) {
             $json['data'][] = [
-                $transaction->getTransactionAt() ? $transaction->getTransactionAt()->format('d/m/Y') : null,
-                $transaction->getHash(),
-                $transaction->getDescription(),
-                $transaction->isChecked() ? '✓' : null,
-                number_format($transaction->getAmount() / 100, 2, ',', ' ').'€',
-                $transaction->getId(),
+                'id' => $transaction->getId(),
+                'transactionAt' => $transaction->getTransactionAt() ? $transaction->getTransactionAt()->format('d/m/Y') : null,
+                'hash' => $transaction->getHash(),
+                'description' => $transaction->getDescription(),
+                'checked' => $transaction->isChecked() ? '✓' : null,
+                'amount' => number_format($transaction->getAmount() / 100, 2, ',', ' ').'€',
             ];
         }
 
