@@ -8,6 +8,8 @@ require( "datatables.net-scroller" )( window, $ );
 require( "datatables.net-select" )( window, $ );
 require( "datatables.net-buttons" )( window, $ );
 
+require( "howler" );
+
 require("./component/transactions");
 
 $( document ).ready( function() {

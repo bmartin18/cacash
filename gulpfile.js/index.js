@@ -8,7 +8,7 @@ global.env = 'dev';
 
 gulp.task('dev', ['dev-nowatch', 'watch']);
 
-gulp.task('dev-nowatch', ['move-fonts', 'move-images', 'sass', 'javascripts']);
+gulp.task('dev-nowatch', ['move-fonts', 'move-images', 'move-sounds', 'sass', 'javascripts']);
 
 gulp.task('set-prod-env', function() {
     global.env = 'prod';

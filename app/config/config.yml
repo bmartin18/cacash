@@ -41,6 +41,8 @@ twig:
     strict_variables: '%kernel.debug%'
     form_themes:
         - '/form/materialize.html.twig'
+    globals:
+        fart_joke: '%fart_joke%'
 
 # Doctrine Configuration
 doctrine:

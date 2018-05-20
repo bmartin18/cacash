@@ -73,6 +73,10 @@ let Transactions = function() {
                                 reloadDataTable();
                             });
                         } );
+
+                        if ( $container.hasClass( "fart" ) ) {
+                            fart.play( "fart-" + Math.floor( ( Math.random() * 3 ) + 1 ) );
+                        }
                     }
                 },
                 {
@@ -91,9 +95,9 @@ let Transactions = function() {
                 }
             ],
             "columnDefs": [
-                { "className": "hide-on-med-and-down", "targets": [ "hash" ] },
-                { "className": "center-align hide-on-med-and-down", "targets": [ "checked" ] },
-                { "className": "amount right-align", "targets": [ "amount" ] }
+                { "className": "hide-on-med-and-down", "targets": [ 1 ] },
+                { "className": "center-align hide-on-med-and-down", "targets": [ 3 ] },
+                { "className": "amount right-align", "targets": [ 4 ] }
             ],
             "language": {
                 "sProcessing":     "Traitement en cours...",
@@ -249,6 +253,15 @@ let Transactions = function() {
             $( "#modal-transaction" ).modal( "open" );
             $( "#transaction_description" ).focus();
         };
+
+        let fart = new Howl({
+            src: [$container.data("fart") + ".ogg", $(this).data("fart") + ".mp3"],
+            sprite: {
+                "fart-1": [0, 549],
+                "fart-2": [549, 679],
+                "fart-3": [1228, 340]
+            }
+        });
     };
 
     $( function() {

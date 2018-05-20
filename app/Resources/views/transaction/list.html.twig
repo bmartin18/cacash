@@ -1,7 +1,8 @@
-<table class="striped comp-transactions js-transactions"
+<table class="striped comp-transactions js-transactions {% if fart_joke %}fart{% endif %}"
        data-list="{{ path('list_json_transactions', {'id': account.id}) }}"
        data-delete="{{ path('data_delete_transaction') }}"
        data-check="{{ path('data_check_transaction') }}"
+       data-fart="{{ asset('sounds/fart') }}"
 >
     <thead>
         <tr>
