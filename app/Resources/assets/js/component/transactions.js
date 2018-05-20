@@ -91,6 +91,8 @@ let Transactions = function() {
                                 reloadDataTable();
                             });
                         } );
+
+                        dataTable.rows().deselect();
                     }
                 }
             ],
