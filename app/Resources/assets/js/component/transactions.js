@@ -17,7 +17,7 @@ let Transactions = function() {
             "ajax": $container.data( "list" ),
             "deferRender": true,
             "scroller": true,
-            "scrollY": $(window).height() - 340 + "px",
+            "scrollY": $(window).height() - 330 + "px",
             "scrollCollapse": true,
             "ordering": false,
             "pageLength": 100,
@@ -38,8 +38,7 @@ let Transactions = function() {
                     "text": "<i class=\"material-icons left\">add</i><span class='hide-on-med-and-down'><u>N</u>ouveau</span>",
                     "className": "btn",
                     "key": {
-                        "key": "n",
-                        "shiftKey": true
+                        "key": "n"
                     },
                     "action": function ( e, dt, node, config ) {
                         $.get( $( "#modal" ).data( "create" ), function(response) {
@@ -48,13 +47,9 @@ let Transactions = function() {
                     }
                 },
                 {
-                    "text": "<i class=\"material-icons left\">edit</i><span class='hide-on-med-and-down'><u>M</u>odifier</span>",
-                    "className": "btn",
+                    "text": "<i class=\"material-icons left\">edit</i><span class='hide-on-med-and-down'>Modifier</span>",
+                    "className": "btn button-edit",
                     "enabled": false,
-                    "key": {
-                        "key": "m",
-                        "shiftKey": true
-                    },
                     "action": function ( e, dt, node, config ) {
                         let id = dataTable.rows( { selected: true } ).data()[0][ "id" ];
 
@@ -68,8 +63,7 @@ let Transactions = function() {
                     "className": "btn",
                     "enabled": false,
                     "key": {
-                        "key": "p",
-                        "shiftKey": true
+                        "key": "p"
                     },
                     "action": function ( e, dt, node, config ) {
                         let data = dataTable.rows( { selected: true } ).data();
@@ -82,13 +76,9 @@ let Transactions = function() {
                     }
                 },
                 {
-                    "text": "<i class=\"material-icons left\">delete</i><span class='hide-on-med-and-down'><u>S</u>upprimer</span>",
-                    "className": "btn right red",
+                    "text": "<i class=\"material-icons left\">delete</i><span class='hide-on-med-and-down'>Supprimer</span>",
+                    "className": "btn button-delete right red",
                     "enabled": false,
-                    "key": {
-                        "key": "s",
-                        "shiftKey": true
-                    },
                     "action": function ( e, dt, node, config ) {
                         let data = dataTable.rows( { selected: true } ).data();
 
@@ -115,8 +105,8 @@ let Transactions = function() {
                 "sLoadingRecords": "Chargement en cours...",
                 "sZeroRecords":    "Aucun résultat",
                 "sEmptyTable":     "Aucune transaction",
-                select: {
-                    rows: {
+                "select": {
+                    "rows": {
                         _: " (%d transactions sélectionnées)",
                         0: "",
                         1: " (1 transaction sélectionnée)"
@@ -141,13 +131,19 @@ let Transactions = function() {
             }, false);
         };
 
-        $( "#search" ).keyup( function() {
-            dataTable.search( $( this ).val() ).draw();
+        let $search = $( "#search" );
 
-            if ( $( this ).val() === "" ) {
+        $search.keyup( function() {
+            search();
+        });
+
+        let search = function () {
+            dataTable.search( $search.val() ).draw();
+
+            if ( $search.val() === "" ) {
                 dataTable.row( lastRow ).scrollTo( false );
             }
-        });
+        };
 
         let countSelectedRows = 0;
 
@@ -159,17 +155,76 @@ let Transactions = function() {
             dataTable.button( 3 ).enable( countSelectedRows > 0 );
         } );
 
+        $( window ).keydown( function( e ) {
+            if ( e.keyCode === 13 ) {
+                dataTable.button( ".button-edit" ).trigger();
+                return;
+            }
+
+            if ( e.keyCode === 46 || e.keyCode === 8 ) {
+                dataTable.button( ".button-delete" ).trigger();
+                return;
+            }
+
+            if ( e.keyCode === 27 ) {
+                dataTable.rows().deselect();
+
+                $( "#search" ).val( "" );
+                $search.blur();
+                search();
+
+                return;
+            }
+
+            if ( e.keyCode === 38 ||  e.keyCode === 40 ) {
+                let page = dataTable.scroller.page();
+                let rows = dataTable.rows( { selected: true } )[0];
+                let row = 0;
+
+                if ( e.keyCode === 38 ) {
+                    row = parseInt(rows[0]) - 1;
+                }
+
+                if ( e.keyCode === 40 ) {
+                    row = parseInt(rows[rows.length - 1]) + 1;
+                }
+
+                e.preventDefault();
+
+                dataTable.rows().deselect();
+                dataTable.row(row).select();
+
+                if (row - 3 < page.start ) {
+                    dataTable.row(row - 3).scrollTo(false);
+                }
+
+                if (row > page.end - 3) {
+                    dataTable.row(page.start + 1).scrollTo(false);
+                }
+            }
+        } );
+
+        $( window ).keyup( function( e ) {
+            if ( e.keyCode === 82 ) {
+                if ( $( "input:focus" ).length > 0 ) {
+                    return;
+                }
+
+                $search.focus();
+            }
+        } );
+
         let initFormTransaction = function( form ) {
             $( "#modal" ).html( form );
 
             $( ".datepicker" ).pickadate({
-                selectMonths: true, // Creates a dropdown to control month
-                selectYears: 15, // Creates a dropdown of 15 years to control year,
+                selectMonths: true,
+                selectYears: 15,
                 today: "Aujourd'hui",
                 clear: "Effacer",
                 close: "OK",
-                closeOnSelect: false, // Close upon selecting a date,
-                container: undefined, // ex. 'body' will append picker to body
+                closeOnSelect: false,
+                container: undefined,
                 monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
                 monthsShort: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
                 weekdaysShort: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
@@ -192,6 +247,7 @@ let Transactions = function() {
 
             $( ".modal" ).modal();
             $( "#modal-transaction" ).modal( "open" );
+            $( "#transaction_description" ).focus();
         };
     };
 
