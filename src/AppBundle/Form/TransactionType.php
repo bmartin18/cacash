@@ -38,6 +38,8 @@ class TransactionType extends AbstractType
                 'label' => 'Catégorie',
                 'class' => Category::class,
                 'choice_label' => 'name',
+                'placeholder' => '-- Choisir une catégorie --',
+                'required' => false,
                 'query_builder' => function (ServiceEntityRepository $er) {
                     return $er->createQueryBuilder('c')
                         ->leftJoin('c.parent', 'p')
