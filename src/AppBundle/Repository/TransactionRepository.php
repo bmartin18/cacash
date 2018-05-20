@@ -32,9 +32,12 @@ class TransactionRepository extends ServiceEntityRepository
     {
         return $this
             ->createQueryBuilder('t')
+            ->select('t')
+            ->addSelect('CASE WHEN t.transactionAt IS NULL THEN 1 ELSE 0 END as HIDDEN transaction_at_is_null')
             ->where('t.account = :account')
             ->setParameter('account', $account)
-            ->orderBy('t.transactionAt', 'ASC')
+            ->orderBy('transaction_at_is_null', 'ASC')
+            ->addOrderBy('t.transactionAt', 'ASC')
             ->getQuery()
             ->getResult()
         ;
