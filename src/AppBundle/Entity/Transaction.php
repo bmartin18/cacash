@@ -247,7 +247,7 @@ class Transaction
             return null;
         }
 
-        return $this->amount / 100;
+        return $this->amount < 0 ? $this->amount * -1 / 100 : $this->amount / 100;
     }
 
     /**
@@ -299,7 +299,7 @@ class Transaction
     public function getTransactionAtDisplayable()
     {
         if ($this->transactionAt !== null) {
-            return $this->transactionAt->format('Y/m/d');
+            return $this->transactionAt->format('d/m/Y');
         }
 
         return null;
@@ -362,7 +362,7 @@ class Transaction
      */
     public function setDebit($debit)
     {
-        if ($debit && $this->getAmount() > 0) {
+        if ($debit && $this->getAmount() > 0 || !$debit && $this->getAmount() < 0) {
             $this->setAmount($this->getAmount() * -1);
         }
 
@@ -376,7 +376,7 @@ class Transaction
      */
     public function isDebit()
     {
-        if ($this->getAmount() < 0) {
+        if ($this->getAmount() <= 0) {
             return true;
         }
 

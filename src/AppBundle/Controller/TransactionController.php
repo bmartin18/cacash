@@ -48,17 +48,25 @@ class TransactionController extends Controller
      *      }
      * )
      *
+     * @Route("/transaction/account-{id}/edit/{transactionId}", name="edit_transaction",
+     *      requirements={
+     *          "id": "\d+",
+     *          "transactionId": "\d+",
+     *      }
+     * )
+     *
      * @ParamConverter("id", class="AppBundle:Account")
      *
      * @param Account $account
      * @param Request $request
+     * @param int     $transactionId
      *
-     * @return RedirectResponse|Response
+     * @return JsonResponse|Response
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function createTransactionAction(Account $account, Request $request)
+    public function createTransactionAction(Account $account, Request $request, $transactionId = null)
     {
         if ($this->getUser() !== $account->getUser()) {
             throw $this->createAccessDeniedException('You cannot access to this account.');
@@ -66,22 +74,35 @@ class TransactionController extends Controller
 
         $transaction = new Transaction();
 
-        $form = $this->createForm(TransactionType::class, $transaction, array(
-            'action' => $this->generateUrl('create_transaction', ['id' => $account->getId()]),
-        ));
+        if ($transactionId) {
+            $transaction = $this
+                ->transactionRepository
+                ->find($transactionId)
+            ;
+        }
+
+        $form = $this->createForm(TransactionType::class, $transaction);
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $transaction = $form->getData();
-            $transaction->setAccount($account);
+        $json = ['success' => false];
 
-            $this->transactionRepository->save($transaction);
+        if ($form->isSubmitted() && $request->isXmlHttpRequest()) {
+            if ($form->isValid()) {
+                $transaction = $form->getData();
+                $transaction->setAccount($account);
 
-            return $this->redirectToRoute('account', ['id' => $account->getId(), 'slug' => $account->getSlug()]);
+                $this->transactionRepository->save($transaction);
+
+                $json['success'] = true;
+                $json['id'] = $transaction->getId();
+            }
+
+            return new JsonResponse($json);
         }
 
         return $this->render('transaction/form.html.twig', array(
+            'account' => $account,
             'form' => $form->createView(),
         ));
     }
@@ -136,6 +157,7 @@ class TransactionController extends Controller
                 $transaction->getDescription(),
                 $transaction->isChecked() ? '✓' : null,
                 number_format($transaction->getAmount() / 100, 2, ',', ' ').'€',
+                $transaction->getId(),
             ];
         }
 

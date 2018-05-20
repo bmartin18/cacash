@@ -1,5 +1,9 @@
 <div id="modal-transaction" class="modal bottom-sheet">
-    {{ form_start(form) }}
+    {% if form.vars.value.id %}
+        {{ form_start(form, {'attr': {'data-action': path('edit_transaction', {'id': account.id, 'transactionId': form.vars.value.id})}}) }}
+    {% else %}
+        {{ form_start(form, {'attr': {'data-action': path('create_transaction', {'id': account.id})}}) }}
+    {% endif %}
         <div class="container">
             <div class="modal-content">
                 <div class="row">

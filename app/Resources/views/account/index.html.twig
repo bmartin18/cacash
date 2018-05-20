@@ -22,11 +22,14 @@
                             <a class="btn disabled balance">{{ account.balance|price }}</a>
                         </div>
                     </div>
-                    {#<a class="btn modal-trigger" href="#modal-transaction"></a>#}
                 </div>
             </div>
         </div>
     </div>
 
-    {{ render(path('create_transaction', {'id': account.id})) }}
+    <div id="modal"
+         data-create="{{ path('create_transaction', {'id': account.id}) }}"
+         data-edit="{{ path('edit_transaction', {'id': account.id}) }}"
+    >
+    </div>
 {% endblock %}

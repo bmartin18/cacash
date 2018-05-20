@@ -46,7 +46,6 @@ class TransactionType extends AbstractType
             ->add('debit', CheckboxType::class, [
                 'label' => 'Débit',
                 'required' => false,
-                'data' => true,
             ])
             ->add('transactionAtDisplayable', TextType::class, [
                 'label' => 'Date de la transaction',

@@ -30,7 +30,9 @@ let Transactions = function() {
                     "text": "<i class=\"material-icons left\">add</i>Transaction",
                     "className": "btn",
                     "action": function ( e, dt, node, config ) {
-                        $( "#modal-transaction" ).modal( "open" );
+                        $.get( $( "#modal" ).data( "create" ), function(response) {
+                            initFormTransaction( response );
+                        });
                     }
                 },
                 {
@@ -38,7 +40,11 @@ let Transactions = function() {
                     "className": "btn",
                     "enabled": false,
                     "action": function ( e, dt, node, config ) {
+                        let id = dataTable.rows( { selected: true } ).data()[0][5];
 
+                        $.get( $( "#modal" ).data( "edit" ) + "/" + id, function(response) {
+                            initFormTransaction( response );
+                        });
                     }
                 },
                 {
@@ -53,7 +59,8 @@ let Transactions = function() {
             "columnDefs": [
                 { "className": "hide-on-med-and-down", "targets": [ 1 ] },
                 { "className": "center-align hide-on-med-and-down", "targets": [ 3 ] },
-                { "className": "amount right-align", "targets": [ 4 ] }
+                { "className": "amount right-align", "targets": [ 4 ] },
+                { "className": "hide", "targets": [ 5 ] }
             ],
             "language": {
                 "sProcessing":     "Traitement en cours...",
@@ -101,6 +108,41 @@ let Transactions = function() {
             dataTable.button( 1 ).enable( countSelectedRows === 1 );
             dataTable.button( 2 ).enable( countSelectedRows > 0 );
         } );
+
+        let initFormTransaction = function( form ) {
+            $( "#modal" ).html( form );
+
+            $( ".datepicker" ).pickadate({
+                selectMonths: true, // Creates a dropdown to control month
+                selectYears: 15, // Creates a dropdown of 15 years to control year,
+                today: "Aujourd'hui",
+                clear: "Effacer",
+                close: "OK",
+                closeOnSelect: false, // Close upon selecting a date,
+                container: undefined, // ex. 'body' will append picker to body
+                monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+                monthsShort: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+                weekdaysShort: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+                weekdaysLetter: ["D","L", "M", "M", "J", "V", "S"],
+                format: 'dd/mm/yyyy',
+            });
+
+            $( "form[name='transaction']" ).submit(function(e) {
+                e.preventDefault();
+
+                $.post( $( this ).data( "action" ), $( this ).serialize(), function(response) {
+                    if (response.success) {
+                        dataTable.ajax.reload(null, false);
+                        $( "#modal-transaction" ).modal( "close" );
+                    }
+                }, 'JSON');
+            });
+
+            Materialize.updateTextFields();
+
+            $( ".modal" ).modal();
+            $( "#modal-transaction" ).modal( "open" );
+        };
     };
 
     $( function() {
