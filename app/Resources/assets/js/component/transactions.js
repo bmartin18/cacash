@@ -162,11 +162,14 @@ let Transactions = function() {
         $( window ).keydown( function( e ) {
             if ( e.keyCode === 13 ) {
                 dataTable.button( ".button-edit" ).trigger();
+                dataTable.rows().deselect();
+
                 return;
             }
 
             if ( e.keyCode === 46 || e.keyCode === 8 ) {
                 dataTable.button( ".button-delete" ).trigger();
+
                 return;
             }
 
