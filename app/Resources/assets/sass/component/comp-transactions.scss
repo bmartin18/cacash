@@ -17,6 +17,12 @@ table.comp-transactions {
           font-weight: bold;
         }
       }
+
+      &.selected,
+      &.selected.credit {
+        color: white;
+        background-color: $secondary-color-dark;
+      }
     }
   }
 }

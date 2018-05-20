@@ -20,6 +20,10 @@ let Transactions = function() {
             "scrollCollapse": true,
             "ordering": false,
             "pageLength": 100,
+            "select": {
+                "style": "os",
+                "blurable": true
+            },
             "columnDefs": [
                 { "className": "hide-on-med-and-down", "targets": [ 1 ] },
                 { "className": "center-align hide-on-med-and-down", "targets": [ 3 ] },
@@ -35,6 +39,13 @@ let Transactions = function() {
                 "sLoadingRecords": "Chargement en cours...",
                 "sZeroRecords":    "Aucun résultat",
                 "sEmptyTable":     "Aucune transaction",
+                select: {
+                    rows: {
+                        _: " (%d transactions sélectionnées)",
+                        0: "",
+                        1: " (1 transaction sélectionnée)"
+                    }
+                }
             },
             "createdRow": function (row, data) {
                 if ( data[4].charAt(0) !== "-" ) {
