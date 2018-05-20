@@ -56,6 +56,20 @@ let Transactions = function() {
                     }
                 },
                 {
+                    "text": "<i class=\"material-icons left\">delete</i>Supprimer",
+                    "className": "btn",
+                    "enabled": false,
+                    "action": function ( e, dt, node, config ) {
+                        let data = dataTable.rows( { selected: true } ).data();
+
+                        $( data ).each( function() {
+                            $.get( $container.data( "delete" ) + "/" + this[ "id" ], function() {
+                                reloadDataTable();
+                            });
+                        } );
+                    }
+                },
+                {
                     "text": "<i class=\"material-icons left\">check</i>Pointer",
                     "className": "btn",
                     "enabled": false,
@@ -126,6 +140,7 @@ let Transactions = function() {
 
             dataTable.button( 1 ).enable( countSelectedRows === 1 );
             dataTable.button( 2 ).enable( countSelectedRows > 0 );
+            dataTable.button( 3 ).enable( countSelectedRows > 0 );
         } );
 
         let initFormTransaction = function( form ) {

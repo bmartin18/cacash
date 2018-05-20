@@ -1,6 +1,7 @@
 <table class="striped comp-transactions js-transactions"
        data-list="{{ path('list_json_transactions', {'id': account.id}) }}"
-       data-check="{{ path('check_transaction') }}"
+       data-delete="{{ path('data_delete_transaction') }}"
+       data-check="{{ path('data_check_transaction') }}"
 >
     <thead>
         <tr>

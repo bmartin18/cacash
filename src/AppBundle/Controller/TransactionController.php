@@ -108,23 +108,62 @@ class TransactionController extends Controller
     }
 
     /**
-     * @Route("/transaction/check/{id}", name="check_transaction")
+     * @Route("/transaction/delete", name="data_delete_transaction")
      *
-     * @param int $id
+     * @Route("/transaction/delete/{id}", name="delete_transaction",
+     *      requirements={
+     *          "id": "\d+"
+     *      }
+     * )
+     *
+     * @ParamConverter("id", class="AppBundle:Transaction")
+     *
+     * @param Transaction $transaction
      *
      * @return JsonResponse
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function checkTransactionAction($id = null)
+    public function deleteTransactionAction(Transaction $transaction = null)
     {
-        /** @var Transaction $transaction */
-        $transaction = $this
+        if (!$transaction || $this->getUser() !== $transaction->getAccount()->getUser()) {
+            throw $this->createAccessDeniedException('You cannot access to this transaction.');
+        }
+
+        $this
             ->transactionRepository
-            ->find($id)
+            ->delete($transaction)
         ;
 
+        $json = [
+            'success' => true,
+            'id' => $transaction->getId(),
+        ];
+
+        return new JsonResponse($json);
+    }
+
+    /**
+     * @Route("/transaction/check", name="data_check_transaction")
+     *
+     * @Route("/transaction/check/{id}", name="check_transaction",
+     *      requirements={
+     *          "id": "\d+"
+     *      }
+     * )
+     *
+     * @ParamConverter("id", class="AppBundle:Transaction")
+     *
+     * @param Transaction $transaction
+     *
+     * @return JsonResponse
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function checkTransactionAction(Transaction $transaction = null)
+    {
         if (!$transaction || $this->getUser() !== $transaction->getAccount()->getUser()) {
             throw $this->createAccessDeniedException('You cannot access to this transaction.');
         }
