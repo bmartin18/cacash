@@ -15,5 +15,5 @@ gulp.task('set-prod-env', function() {
 });
 
 gulp.task('prod', function() {
-    runSequence('set-prod-env', ['clean'], ['front-nowatch'], ['revision']);
+    runSequence('set-prod-env', ['clean'], ['dev-nowatch'], ['revision']);
 });
