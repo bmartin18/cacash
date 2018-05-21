@@ -80,13 +80,13 @@ class Transaction
 
     /**
      * @ORM\ManyToOne(targetEntity="Account", inversedBy="transactions")
-     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $account;
 
     /**
      * @ORM\ManyToOne(targetEntity="Category")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
     private $category;
 

@@ -1,0 +1,11 @@
+<div class="card">
+    <div class="card-content">
+        {{ form(form) }}
+    </div>
+</div>
+
+{% for flash_message in app.session.flashBag.get('notice') %}
+    <div class="info success">
+        {{ flash_message }}
+    </div>
+{% endfor %}

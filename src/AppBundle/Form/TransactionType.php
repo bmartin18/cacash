@@ -25,6 +25,8 @@ class TransactionType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $user = $options['user'];
+
         $builder
             ->add('hash', TextType::class, [
                 'label' => 'ID',
@@ -40,13 +42,16 @@ class TransactionType extends AbstractType
                 'choice_label' => 'name',
                 'placeholder' => '-- Choisir une catégorie --',
                 'required' => false,
-                'query_builder' => function (ServiceEntityRepository $er) {
+                'query_builder' => function (ServiceEntityRepository $er) use ($user) {
                     return $er->createQueryBuilder('c')
                         ->leftJoin('c.parent', 'p')
+                        ->where('c.user = :user')
+                            ->setParameter('user', $user)
                         ->orderBy('p.name, c.name', 'ASC')
                     ;
                 },
                 'group_by' => function ($category) {
+                    /** @var Category $category */
                     if (is_null($category->getParent())) {
                         return "Catégories principales";
                     }
@@ -82,6 +87,7 @@ class TransactionType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
+            'user' => null,
             'data_class' => Transaction::class,
             'translation_domain' => false,
         ]);

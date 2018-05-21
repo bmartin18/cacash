@@ -17,7 +17,7 @@ let Transactions = function() {
             "ajax": $container.data( "list" ),
             "deferRender": true,
             "scroller": true,
-            "scrollY": $(window).height() - 330 + "px",
+            "scrollY": $(window).height() - 340 + "px",
             "scrollCollapse": true,
             "ordering": false,
             "pageLength": 100,

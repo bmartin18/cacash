@@ -77,12 +77,12 @@ class Account
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="accounts")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="Transaction", cascade={"remove"}, mappedBy="account")
+     * @ORM\OneToMany(targetEntity="Transaction", mappedBy="account")
      */
     private $transactions;
 

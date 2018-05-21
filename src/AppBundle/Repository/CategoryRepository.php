@@ -3,6 +3,7 @@
 namespace AppBundle\Repository;
 
 use AppBundle\Entity\Category;
+use AppBundle\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -23,6 +24,24 @@ class CategoryRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param User $user
+     *
+     * @return Category[]
+     */
+    public function getParentList(User $user)
+    {
+        return $this
+            ->createQueryBuilder('c')
+            ->where('c.user = :user')
+                ->setParameter('user', $user)
+                ->andWhere('c.parent IS NULL')
+            ->orderBy('c.name', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
      * @param Category $category
      *
      * @return Category
@@ -33,6 +52,22 @@ class CategoryRepository extends ServiceEntityRepository
     public function save(Category $category)
     {
         $this->getEntityManager()->persist($category);
+        $this->getEntityManager()->flush();
+
+        return $category;
+    }
+
+    /**
+     * @param Category $category
+     *
+     * @return Category
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function delete(Category $category)
+    {
+        $this->getEntityManager()->remove($category);
         $this->getEntityManager()->flush();
 
         return $category;

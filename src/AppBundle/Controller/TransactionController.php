@@ -81,7 +81,9 @@ class TransactionController extends Controller
             ;
         }
 
-        $form = $this->createForm(TransactionType::class, $transaction);
+        $form = $this->createForm(TransactionType::class, $transaction, [
+            'user' => $this->getUser(),
+        ]);
 
         $form->handleRequest($request);
 

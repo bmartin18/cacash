@@ -105,6 +105,7 @@ class ImportTransactionsHelper
                             $cat = new Category();
                             $cat->setName($category);
                             $cat->setParent($parent);
+                            $cat->setUser($account->getUser());
 
                             $this->categoryRepository->save($cat);
                         }

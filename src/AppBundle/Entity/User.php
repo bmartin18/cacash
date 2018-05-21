@@ -21,7 +21,7 @@ class User extends BaseUser
     protected $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="Account", cascade={"persist"}, mappedBy="user")
+     * @ORM\OneToMany(targetEntity="Account", mappedBy="user")
      */
     private $accounts;
 

@@ -5,6 +5,11 @@
 {% block body %}
     <div class="row comp-transactions">
         <div class="col s12">
+            <a class="btn hide-on-med-and-down yellow black-text"
+               href="{{ path('categories') }}"
+            >
+                <i class="material-icons left">list</i>Catégories
+            </a>
             <a class="btn right hide-on-med-and-down"
                href="{{ path('edit_account', {'id': account.id, 'slug': account.slug}) }}"
             >

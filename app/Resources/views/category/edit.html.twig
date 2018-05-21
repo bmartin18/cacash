@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier la catégorie : {{ category.name }}{% endblock %}
+
+{% block body %}
+    <h4 class="light">Modifier la catégorie</h4>
+
+    {% include('/category/form.html.twig') %}
+
+    <a class="btn yellow black-text"
+       href="{{ path('categories') }}"
+    >
+        <i class="material-icons left">list</i>Liste des catégories
+    </a>
+    <a class="btn red right"
+       href="{{ path('delete_Category', {'slug': category.slug, 'id': category.id}) }}"
+    >
+        <i class="material-icons left">delete</i>Supprimer
+    </a>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Catégories{% endblock %}
+
+{% block body %}
+
+    <h4 class="light">Créer une catégorie</h4>
+    {{ render(path('create_category')) }}
+
+    <h4 class="light">Mes catégories</h4>
+    {{ render(path('list_categories')) }}
+
+{% endblock %}

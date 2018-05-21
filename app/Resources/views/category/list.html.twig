@@ -1,0 +1,16 @@
+{% if categories %}
+    <div class="collection">
+        {% for category in categories %}
+            <a href="{{ path('edit_category', { 'slug': category.slug, 'categoryId': category.id }) }}" class="collection-item">
+                <b>{{ category.name }}</b>
+            </a>
+
+            {% for child in category.children %}
+                <a href="{{ path('edit_category', { 'slug': child.slug, 'categoryId': child.id }) }}" class="collection-item">
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    {{ child.name }}
+                </a>
+            {% endfor %}
+        {% endfor %}
+    </div>
+{% endif %}

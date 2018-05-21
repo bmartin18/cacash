@@ -44,14 +44,21 @@ class Category
 
     /**
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
     private $parent;
 
     /**
      * @ORM\OneToMany(targetEntity="Category", mappedBy="parent")
+     * @ORM\OrderBy({"name" = "ASC"})
      */
     private $children;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     */
+    private $user;
 
 
     /**
@@ -178,5 +185,29 @@ class Category
     public function getChildren()
     {
         return $this->children;
+    }
+
+    /**
+     * Set user.
+     *
+     * @param User $user
+     *
+     * @return Category
+     */
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user.
+     *
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }
