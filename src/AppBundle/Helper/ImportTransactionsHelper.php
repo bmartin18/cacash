@@ -7,6 +7,7 @@ use AppBundle\Entity\Category;
 use AppBundle\Entity\Transaction;
 use AppBundle\Repository\CategoryRepository;
 use AppBundle\Repository\TransactionRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -20,22 +21,29 @@ class ImportTransactionsHelper
     /** @var CategoryRepository */
     private $categoryRepository;
 
+    /** @var EntityManagerInterface */
+    private $entityManager;
+
     /**
      * ImportTransactionsHelper constructor.
      *
-     * @param TransactionRepository $transactionRepository
-     * @param CategoryRepository $categoryRepository
+     * @param TransactionRepository  $transactionRepository
+     * @param CategoryRepository     $categoryRepository
+     * @param EntityManagerInterface $entityManager
      */
     public function __construct(
         TransactionRepository $transactionRepository,
-        CategoryRepository $categoryRepository
+        CategoryRepository $categoryRepository,
+        EntityManagerInterface $entityManager
     ) {
         $this->transactionRepository = $transactionRepository;
         $this->categoryRepository = $categoryRepository;
+        $this->entityManager = $entityManager;
     }
 
     /**
      * @param UploadedFile $file
+     * @param Account      $account
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
@@ -64,7 +72,7 @@ class ImportTransactionsHelper
                     break;
 
                 case '^':
-                    $this->transactionRepository->save($transaction);
+                    $this->entityManager->persist($transaction);
 
                     $transaction = new Transaction();
                     $transaction->setAccount($account);
@@ -135,5 +143,8 @@ class ImportTransactionsHelper
                     dump($type.' : '.$content);
             }
         }
+
+        $this->entityManager->flush();
+        $this->transactionRepository->updateBalance($account);
     }
 }
