@@ -26,14 +26,13 @@
                         <div class="input-field col s12">
                             <input type="password" id="password" name="_password" required="required" />
                             <label for="password">{{ 'security.login.password'|trans }}</label>
+                            <p class="right">
+                                <a href="{{ path('fos_user_resetting_request') }}">(mot de passe oublié ?)</a>
+                            </p>
                         </div>
 
                         <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
                         <label for="remember_me">{{ 'security.login.remember_me'|trans }}</label>
-
-                        <p class="right">
-                            <a href="{{ path('fos_user_resetting_request') }}">(mot de passe oublié ?)</a>
-                        </p>
                     </div>
                     <div class="card-action">
                         <div class="row center-align">

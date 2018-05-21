@@ -3,7 +3,7 @@ $asset-path: '/assets/images' !default;
 $font-path: '/assets/fonts' !default;
 
 // colors
-$primaryColor: #ffe600;
+$primaryColor: #feea3b;
 $secondaryColor: #A0609D;
 $lightGrey: #F8F8F8;
 
@@ -16,7 +16,7 @@ $lightError: rgba(255, 0, 0, 0.10);
 
 // materialize
 $primary-color: $primaryColor !default;
-$primary-color-light: lighten($primary-color, 30%) !default;
+$primary-color-light: lighten($primary-color, 15%) !default;
 $primary-color-dark: darken($primary-color, 15%) !default;
 
 $secondary-color: $secondaryColor !default;

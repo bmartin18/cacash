@@ -5,7 +5,11 @@
 {% block body %}
     <div class="row comp-transactions">
         <div class="col s12">
-            <a class="btn right" href="{{ path('edit_account', {'id': account.id, 'slug': account.slug}) }}"><i class="material-icons left">settings</i>Paramètres</a>
+            <a class="btn right hide-on-med-and-down"
+               href="{{ path('edit_account', {'id': account.id, 'slug': account.slug}) }}"
+            >
+                <i class="material-icons left">settings</i>Paramètres
+            </a>
         </div>
         <div class="col s12">
             <div class="card">
@@ -14,11 +18,11 @@
                 </div>
                 <div class="card-action">
                     <div class="row">
-                        <div class="col s12 l6">
+                        <div class="col s6">
                             <input id="search" type="text" autocomplete="off">
                             <label for="search"><u>R</u>echercher</label>
                         </div>
-                        <div class="col s12 l6 right-align">
+                        <div class="col s6 right-align">
                             <a class="btn disabled balance">{{ account.balance|price }}</a>
                         </div>
                     </div>

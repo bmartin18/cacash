@@ -1,0 +1,32 @@
+{
+  "short_name": "Cacash",
+  "name": "Cacash",
+  "icons": [
+    {
+      "src": "/assets/images/icon/icon-256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/images/icon/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/images/icon/icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/images/icon/icon-64.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#feea3b",
+  "display": "standalone",
+  "theme_color": "#feea3b",
+  "scope": "/",
+  "orientation": "portrait"
+}

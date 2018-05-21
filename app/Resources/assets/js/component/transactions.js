@@ -60,7 +60,7 @@ let Transactions = function() {
                 },
                 {
                     "text": "<i class=\"material-icons left\">check</i><span class='hide-on-med-and-down'><u>P</u>ointer</span>",
-                    "className": "btn",
+                    "className": "btn hide-on-med-and-down",
                     "enabled": false,
                     "key": {
                         "key": "p"
@@ -81,7 +81,7 @@ let Transactions = function() {
                 },
                 {
                     "text": "<i class=\"material-icons left\">delete</i><span class='hide-on-med-and-down'>Supprimer</span>",
-                    "className": "btn button-delete right red",
+                    "className": "btn button-delete right red hide-on-med-and-down",
                     "enabled": false,
                     "action": function ( e, dt, node, config ) {
                         let data = dataTable.rows( { selected: true } ).data();
