@@ -141,6 +141,8 @@ let Transactions = function() {
             }
         } );
 
+        let xhr = false;
+
         let updateRow = function( json ) {
             if ( json.success ) {
                 let row =  $( "#" + json.id );
@@ -160,8 +162,11 @@ let Transactions = function() {
                     $( ".balance" ).html( json.balance );
                 }
 
+                if (xhr) {
+                    xhr.abort();
+                }
 
-                $.get( $container.data( "create" ));
+                xhr = $.get( $container.data( "create" ));
             }
         };
 
