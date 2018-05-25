@@ -405,4 +405,20 @@ class Transaction
     {
         return $this->category;
     }
+
+    /**
+     * @return array
+     */
+    public function getApiResponse()
+    {
+        return [
+            'id' => $this->getId(),
+            'transactionAt' => $this->getTransactionAt() ? $this->getTransactionAt()->format('d/m/Y') : null,
+            'hash' => $this->getHash(),
+            'description' => $this->getDescription(),
+            'checked' => $this->isChecked() ? '✓' : null,
+            'amount' => number_format($this->getAmount() / 100, 2, ',', ' ').'€',
+            'timestamp' => $this->getTransactionAt() ? $this->getTransactionAt()->getTimestamp() : 9999999999,
+        ];
+    }
 }

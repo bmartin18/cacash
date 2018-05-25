@@ -98,6 +98,8 @@ class TransactionController extends Controller
 
                 $json['success'] = true;
                 $json['id'] = $transaction->getId();
+                $json['data'] = $transaction->getApiResponse();
+                $json['balance'] = $account->getBalanceDisplayable();
             }
 
             return new JsonResponse($json);
@@ -133,6 +135,8 @@ class TransactionController extends Controller
             throw $this->createAccessDeniedException('You cannot access to this transaction.');
         }
 
+        $transactionId = $transaction->getId();
+
         $this
             ->transactionRepository
             ->delete($transaction)
@@ -140,7 +144,8 @@ class TransactionController extends Controller
 
         $json = [
             'success' => true,
-            'id' => $transaction->getId(),
+            'id' => $transactionId,
+            'balance' => $transaction->getAccount()->getBalanceDisplayable(),
         ];
 
         return new JsonResponse($json);
@@ -180,6 +185,7 @@ class TransactionController extends Controller
         $json = [
             'success' => true,
             'id' => $transaction->getId(),
+            'data' => $transaction->getApiResponse(),
         ];
 
         return new JsonResponse($json);
@@ -206,6 +212,43 @@ class TransactionController extends Controller
     }
 
     /**
+     * @Route("/transactions/create/account-{id}.json", name="create_json_transactions",
+     *      requirements={
+     *          "id": "\d+",
+     *      }
+     * )
+     *
+     * @ParamConverter("id", class="AppBundle:Account")
+     *
+     * @param Account $account
+     *
+     * @return JsonResponse
+     */
+    public function createJsonTransactionsAction(Account $account)
+    {
+        if ($this->getUser() !== $account->getUser()) {
+            throw $this->createAccessDeniedException('You cannot access to this account.');
+        }
+
+        $transactions = $this
+            ->transactionRepository
+            ->getTransactions($account)
+        ;
+
+        $json = array();
+        $json['balance'] = $account->getBalanceDisplayable();
+
+        /** @var Transaction $transaction */
+        foreach ($transactions as $transaction) {
+            $json['data'][] = $transaction->getApiResponse();
+        }
+
+        file_put_contents(sprintf('data/%s-%d.json', $account->getSlug(), $account->getId()), json_encode($json));
+
+        return new JsonResponse($json);
+    }
+
+    /**
      * @Route("/transactions/list/account-{id}.json", name="list_json_transactions",
      *      requirements={
      *          "id": "\d+",
@@ -216,32 +259,21 @@ class TransactionController extends Controller
      *
      * @param Account $account
      *
-     * @return Response
+     * @return Response|RedirectResponse
      */
     public function listJsonTransactionsAction(Account $account)
     {
-        $transactions = $this
-            ->transactionRepository
-            ->getTransactions($account)
-        ;
-
-        $json = array();
-
-        /** @var Transaction $transaction */
-        foreach ($transactions as $transaction) {
-            $json['data'][] = [
-                'id' => $transaction->getId(),
-                'transactionAt' => $transaction->getTransactionAt() ? $transaction->getTransactionAt()->format('d/m/Y') : null,
-                'hash' => $transaction->getHash(),
-                'description' => $transaction->getDescription(),
-                'checked' => $transaction->isChecked() ? '✓' : null,
-                'amount' => number_format($transaction->getAmount() / 100, 2, ',', ' ').'€',
-            ];
-
-            $json['balance'] = number_format($account->getBalance() / 100, 2, ',', ' ').'€';
+        if ($this->getUser() !== $account->getUser()) {
+            throw $this->createAccessDeniedException('You cannot access to this account.');
         }
 
-        return new JsonResponse($json);
+        try {
+            $json = file_get_contents(sprintf('data/%s-%d.json', $account->getSlug(), $account->getId()));
+        } catch (\Exception $e) {
+            return $this->redirectToRoute('create_json_transactions', ['id' => $account->getId()]);
+        }
+
+        return new Response($json);
     }
 
     /**
@@ -281,14 +313,14 @@ class TransactionController extends Controller
                 ;
 
                 return $this->redirectToRoute('account', ['id' => $account->getId(), 'slug' => $account->getSlug()]);
-            } else {
-                $this->addFlash(
-                    'error',
-                    'Erreur lors de l\'import.'
-                );
-
-                return $this->redirectToRoute('edit_account', ['id' => $account->getId(), 'slug' => $account->getSlug()]);
             }
+
+            $this->addFlash(
+                'error',
+                'Erreur lors de l\'import.'
+            );
+
+            return $this->redirectToRoute('edit_account', ['id' => $account->getId(), 'slug' => $account->getSlug()]);
         }
 
         return $this->render('transaction/import.html.twig', [

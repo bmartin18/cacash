@@ -1,5 +1,6 @@
 <table class="striped comp-transactions js-transactions {% if fart_joke %}fart{% endif %}"
        data-list="{{ path('list_json_transactions', {'id': account.id}) }}"
+       data-create="{{ path('create_json_transactions', {'id': account.id}) }}"
        data-delete="{{ path('data_delete_transaction') }}"
        data-check="{{ path('data_check_transaction') }}"
        data-fart="{{ asset('sounds/fart') }}"
@@ -11,6 +12,8 @@
             <th>Label</th>
             <th class="center-align hide-on-med-and-down">Pointage</th>
             <th class="right-align">Montant</th>
+            <th class="hide">id</th>
+            <th class="hide">timestamp</th>
         </tr>
     </thead>
 </table>

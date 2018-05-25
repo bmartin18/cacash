@@ -12,21 +12,22 @@ let Transactions = function() {
 
         let lastRow = 0;
 
-        let dataTable = $container.DataTable( {
+        let table = $container.DataTable( {
             "dom": 'tiB',
             "ajax": $container.data( "list" ),
             "deferRender": true,
             "scroller": true,
-            "scrollY": $(window).height() - 340 + "px",
+            "scrollY": $( window ).height() - 340 + "px",
             "scrollCollapse": true,
-            "ordering": false,
             "pageLength": 100,
             "columns": [
                 { "data": "transactionAt" },
                 { "data": "hash" },
                 { "data": "description" },
                 { "data": "checked" },
-                { "data": "amount" }
+                { "data": "amount" },
+                { "data": "id" },
+                { "data": "timestamp" }
             ],
             "rowId": "id",
             "select": {
@@ -40,9 +41,9 @@ let Transactions = function() {
                     "key": {
                         "key": "n"
                     },
-                    "action": function ( e, dt, node, config ) {
-                        $.get( $( "#modal" ).data( "create" ), function(response) {
-                            initFormTransaction( response );
+                    "action": function () {
+                        $.get( $( "#modal" ).data( "create" ), function( form ) {
+                            initFormTransaction( form );
                         });
                     }
                 },
@@ -50,11 +51,11 @@ let Transactions = function() {
                     "text": "<i class=\"material-icons left\">edit</i><span class='hide-on-med-and-down'>Modifier</span>",
                     "className": "btn button-edit",
                     "enabled": false,
-                    "action": function ( e, dt, node, config ) {
-                        let id = dataTable.rows( { selected: true } ).data()[0][ "id" ];
+                    "action": function () {
+                        let id = table.rows( { selected: true } ).data()[0][ "id" ];
 
-                        $.get( $( "#modal" ).data( "edit" ) + "/" + id, function(response) {
-                            initFormTransaction( response );
+                        $.get( $( "#modal" ).data( "edit" ) + "/" + id, function( html ) {
+                            initFormTransaction( html );
                         });
                     }
                 },
@@ -65,12 +66,12 @@ let Transactions = function() {
                     "key": {
                         "key": "p"
                     },
-                    "action": function ( e, dt, node, config ) {
-                        let data = dataTable.rows( { selected: true } ).data();
+                    "action": function () {
+                        let data = table.rows( { selected: true } ).data();
 
                         $( data ).each( function() {
-                            $.get( $container.data( "check" ) + "/" + this[ "id" ], function() {
-                                reloadDataTable();
+                            $.get( $container.data( "check" ) + "/" + this[ "id" ], function( json ) {
+                                updateRow( json );
                             });
                         } );
 
@@ -83,23 +84,30 @@ let Transactions = function() {
                     "text": "<i class=\"material-icons left\">delete</i><span class='hide-on-med-and-down'>Supprimer</span>",
                     "className": "btn button-delete right red hide-on-med-and-down",
                     "enabled": false,
-                    "action": function ( e, dt, node, config ) {
-                        let data = dataTable.rows( { selected: true } ).data();
+                    "action": function () {
+                        let data = table.rows( { selected: true } ).data();
 
                         $( data ).each( function() {
-                            $.get( $container.data( "delete" ) + "/" + this[ "id" ], function() {
-                                reloadDataTable();
-                            });
+                            $.get( $container.data( "delete" ) + "/" + this[ "id" ], function( json ) {
+                                if ( json.success ) {
+                                    updateRow( json );
+                                }
+                            } );
                         } );
 
-                        dataTable.rows().deselect();
+                        table.rows().deselect();
                     }
                 }
             ],
             "columnDefs": [
                 { "className": "hide-on-med-and-down", "targets": [ 1 ] },
                 { "className": "center-align hide-on-med-and-down", "targets": [ 3 ] },
-                { "className": "amount right-align", "targets": [ 4 ] }
+                { "className": "amount right-align", "targets": [ 4 ] },
+                { "className": "hide", "targets": [ 5, 6 ] },
+                {
+                    targets: [ 0 ],
+                    orderData: [ 6, 5 ]
+                }
             ],
             "language": {
                 "sProcessing":     "Traitement en cours...",
@@ -123,18 +131,38 @@ let Transactions = function() {
                 if ( data[ "amount" ].charAt(0) !== "-" ) {
                     $( row ).addClass( "credit" );
                 }
+
+                $( row ).data( "timestamp", data.timestamp );
             },
             "initComplete": function(settings, json) {
                 lastRow = json.data.length - 1;
 
-                dataTable.row( lastRow ).scrollTo();
+                table.row( lastRow ).scrollTo();
             }
         } );
 
-        let reloadDataTable = function() {
-            dataTable.ajax.reload(function ( json ) {
-                $( ".balance" ).html( json.balance );
-            }, false);
+        let updateRow = function( json ) {
+            if ( json.success ) {
+                let row =  $( "#" + json.id );
+
+                if ( json.data ) {
+                    if ( row.length > 0 ) {
+                        table.row( row ).data( json.data ).select().draw( false );
+                    } else {
+                        table.row.add( json.data ).select().draw( false ).scrollTo();
+                    }
+
+                } else {
+                    table.row( row ).remove().draw( false );
+                }
+
+                if ( json.balance ) {
+                    $( ".balance" ).html( json.balance );
+                }
+
+
+                $.get( $container.data( "create" ));
+            }
         };
 
         let $search = $( "#search" );
@@ -144,50 +172,52 @@ let Transactions = function() {
         });
 
         let search = function () {
-            dataTable.search( $search.val() ).draw();
+            table.search( $search.val() ).draw();
 
             if ( $search.val() === "" ) {
-                dataTable.row( lastRow ).scrollTo( false );
+                table.row( lastRow ).scrollTo( false );
             }
         };
 
         let countSelectedRows = 0;
 
-        dataTable.on( "select deselect", function () {
-            countSelectedRows = dataTable.rows( { selected: true } ).count();
+        table.on( "select deselect", function () {
+            countSelectedRows = table.rows( { selected: true } ).count();
 
-            dataTable.button( 1 ).enable( countSelectedRows === 1 );
-            dataTable.button( 2 ).enable( countSelectedRows > 0 );
-            dataTable.button( 3 ).enable( countSelectedRows > 0 );
+            table.button( 1 ).enable( countSelectedRows === 1 );
+            table.button( 2 ).enable( countSelectedRows > 0 );
+            table.button( 3 ).enable( countSelectedRows > 0 );
         } );
 
         $( window ).keydown( function( e ) {
             if ( e.keyCode === 13 ) {
-                dataTable.button( ".button-edit" ).trigger();
-                dataTable.rows().deselect();
+                table.button( ".button-edit" ).trigger();
+                table.rows().deselect();
 
                 return;
             }
 
             if ( e.keyCode === 46 || e.keyCode === 8 ) {
-                dataTable.button( ".button-delete" ).trigger();
+                table.button( ".button-delete" ).trigger();
 
                 return;
             }
 
             if ( e.keyCode === 27 ) {
-                dataTable.rows().deselect();
+                if ( $search.val() !== "" ) {
+                    table.rows().deselect();
 
-                $( "#search" ).val( "" );
-                $search.blur();
-                search();
+                    $("#search").val("");
+                    $search.blur();
+                    search();
+                }
 
                 return;
             }
 
             if ( e.keyCode === 38 ||  e.keyCode === 40 ) {
-                let page = dataTable.scroller.page();
-                let rows = dataTable.rows( { selected: true } )[0];
+                let page = table.scroller.page();
+                let rows = table.rows( { selected: true } )[0];
                 let row = 0;
 
                 if ( e.keyCode === 38 ) {
@@ -200,15 +230,15 @@ let Transactions = function() {
 
                 e.preventDefault();
 
-                dataTable.rows().deselect();
-                dataTable.row(row).select();
+                table.rows().deselect();
+                table.row( row ).select();
 
-                if (row - 3 < page.start ) {
-                    dataTable.row(row - 3).scrollTo(false);
+                if ( row - 3 < page.start ) {
+                    table.row( row - 3 ).scrollTo( false );
                 }
 
-                if (row > page.end - 3) {
-                    dataTable.row(page.start + 1).scrollTo(false);
+                if ( row > page.end - 3 ) {
+                    table.row( page.start + 1 ).scrollTo( false );
                 }
             }
         } );
@@ -244,9 +274,9 @@ let Transactions = function() {
             $( "form[name='transaction']" ).submit(function(e) {
                 e.preventDefault();
 
-                $.post( $( this ).data( "action" ), $( this ).serialize(), function(response) {
-                    if (response.success) {
-                        reloadDataTable();
+                $.post( $( this ).data( "action" ), $( this ).serialize(), function( json ) {
+                    if ( json.success ) {
+                        updateRow( json );
                         $( "#modal-transaction" ).modal( "close" );
                     }
                 }, 'JSON');

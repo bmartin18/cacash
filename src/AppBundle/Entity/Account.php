@@ -178,6 +178,16 @@ class Account
     }
 
     /**
+     * Get displayable balance.
+     *
+     * @return int
+     */
+    public function getBalanceDisplayable()
+    {
+        return number_format($this->getBalance() / 100, 2, ',', ' ').'€';
+    }
+
+    /**
      * Set starred.
      *
      * @param bool $starred
