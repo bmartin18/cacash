@@ -267,9 +267,9 @@ class TransactionController extends Controller
             throw $this->createAccessDeniedException('You cannot access to this account.');
         }
 
-        try {
-            $json = file_get_contents(sprintf('data/%s-%d.json', $account->getSlug(), $account->getId()));
-        } catch (\Exception $e) {
+        $json = @file_get_contents(sprintf('data/%s-%d.json', $account->getSlug(), $account->getId()));
+
+        if (!$json) {
             return $this->redirectToRoute('create_json_transactions', ['id' => $account->getId()]);
         }
 
