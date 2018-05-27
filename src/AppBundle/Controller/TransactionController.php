@@ -268,8 +268,9 @@ class TransactionController extends Controller
         }
 
         $json = @file_get_contents(sprintf('data/%s-%d.json', $account->getSlug(), $account->getId()));
+        $data = json_decode($json, true);
 
-        if (!$json) {
+        if (!isset($data['data'])) {
             return $this->redirectToRoute('create_json_transactions', ['id' => $account->getId()]);
         }
 
