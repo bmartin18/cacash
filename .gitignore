@@ -32,6 +32,7 @@
 
 # Assets and user uploads
 /web/assets/
+/web/data/*.json
 /web/bundles/
 /web/uploads/
 

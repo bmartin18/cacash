@@ -51,6 +51,7 @@ class ImportTransactionsHelper
     public function importFromQif(UploadedFile $file, Account $account)
     {
         set_time_limit(0);
+        ini_set('memory_limit', '512M');
 
         $file = $file->openFile();
 
@@ -83,7 +84,7 @@ class ImportTransactionsHelper
                     break;
 
                 case 'T':
-                    $amount = (int) str_replace(',', '', $content);
+                    $amount = (float) str_replace(',', '', $content);
 
                     $transaction->setAmount($amount*100);
                     break;
