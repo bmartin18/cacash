@@ -11,7 +11,11 @@
                         {{ form_row(form.hash) }}
                     </div>
                     <div class="col l7 s12">
-                        {{ form_row(form.description) }}
+                        {{ form_row(form.description, {'attr': {
+                            'class': 'autocomplete',
+                            'autocomplete': 'off',
+                            'data-autocomplete': path('autocomplete_transactions', {'id': account.id})
+                        }}) }}
                     </div>
                 </div>
                 <div class="row">

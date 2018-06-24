@@ -149,11 +149,10 @@ let Transactions = function() {
 
                 if ( json.data ) {
                     if ( row.length > 0 ) {
-                        table.row( row ).data( json.data ).select().draw( false );
+                        table.row( row ).data( json.data ).select().draw( false ).scrollTo();
                     } else {
                         table.row.add( json.data ).select().draw( false ).scrollTo();
                     }
-
                 } else {
                     table.row( row ).remove().draw( false );
                 }
@@ -274,6 +273,14 @@ let Transactions = function() {
                 weekdaysShort: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
                 weekdaysLetter: ["D","L", "M", "M", "J", "V", "S"],
                 format: 'dd/mm/yyyy',
+            });
+
+            $.get( $( ".autocomplete" ).data( "autocomplete" ), function( autocomplete ) {
+                $('.autocomplete').autocomplete({
+                    data: autocomplete,
+                    limit: 5,
+                    minLength: 3,
+                });
             });
 
             $( "form[name='transaction']" ).submit(function(e) {

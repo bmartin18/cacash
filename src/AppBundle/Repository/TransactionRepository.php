@@ -118,4 +118,22 @@ class TransactionRepository extends ServiceEntityRepository
 
         return $result ? $result['balance'] : 0;
     }
+
+    /**
+     * @param Account $account
+     *
+     * @return array
+     */
+    public function getAllDescriptions(Account $account)
+    {
+        return $this
+            ->createQueryBuilder('t')
+            ->select('t.description')
+            ->where('t.account = :account')
+            ->setParameter('account', $account)
+            ->groupBy('t.description')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

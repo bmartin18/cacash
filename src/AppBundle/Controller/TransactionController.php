@@ -328,4 +328,37 @@ class TransactionController extends Controller
             'form' => $form->createView(),
         ]);
     }
+
+    /**
+     * @Route("/transactions/autocomplete/account-{id}.json", name="autocomplete_transactions",
+     *      requirements={
+     *          "id": "\d+",
+     *      }
+     * )
+     *
+     * @ParamConverter("id", class="AppBundle:Account")
+     *
+     * @param Account $account
+     *
+     * @return Response
+     */
+    public function autocompleteTransactionsAction(Account $account)
+    {
+        if ($this->getUser() !== $account->getUser()) {
+            throw $this->createAccessDeniedException('You cannot access to this account.');
+        }
+
+        $json = [];
+
+        $descriptions = $this
+            ->transactionRepository
+            ->getAllDescriptions($account)
+        ;
+
+        foreach ($descriptions as $description) {
+            $json[$description['description']] = null;
+        }
+
+        return new JsonResponse($json);
+    }
 }
