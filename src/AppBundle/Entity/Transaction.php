@@ -418,6 +418,8 @@ class Transaction
             'description' => $this->getDescription(),
             'checked' => $this->isChecked() ? '✓' : null,
             'amount' => number_format($this->getAmount() / 100, 2, ',', ' ').'€',
+            'debit' => $this->isDebit() ? number_format($this->getAmount() / 100, 2, ',', ' ').'€' : null,
+            'credit' => !$this->isDebit() ? number_format($this->getAmount() / 100, 2, ',', ' ').'€' : null,
             'timestamp' => $this->getTransactionAt() ? $this->getTransactionAt()->getTimestamp() : 9999999999,
         ];
     }

@@ -25,7 +25,8 @@ let Transactions = function() {
                 { "data": "hash" },
                 { "data": "description" },
                 { "data": "checked" },
-                { "data": "amount" },
+                { "data": "debit" },
+                { "data": "credit" },
                 { "data": "id" },
                 { "data": "timestamp" }
             ],
@@ -102,11 +103,11 @@ let Transactions = function() {
             "columnDefs": [
                 { "className": "hide-on-med-and-down", "targets": [ 1 ] },
                 { "className": "center-align hide-on-med-and-down", "targets": [ 3 ] },
-                { "className": "amount right-align", "targets": [ 4 ] },
-                { "className": "hide", "targets": [ 5, 6 ] },
+                { "className": "amount right-align", "targets": [ 4, 5 ] },
+                { "className": "hide", "targets": [ 6, 7 ] },
                 {
                     targets: [ 0 ],
-                    orderData: [ 6, 5 ]
+                    orderData: [ 7, 6 ]
                 }
             ],
             "language": {
