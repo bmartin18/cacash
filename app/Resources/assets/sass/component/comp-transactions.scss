@@ -4,7 +4,21 @@ table.comp-transactions {
   }
 
   tbody {
+    td {
+      border-left: 1px solid $secondary-color-light;
+
+      &:first-child {
+        border: none;
+      }
+    }
+
     tr {
+      border-top: 1px solid $secondary-color-light;
+
+      &:first-child {
+        border: none;
+      }
+
       &:hover {
         cursor: pointer;
         background: $secondary-color-light;
