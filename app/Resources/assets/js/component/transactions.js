@@ -103,7 +103,7 @@ let Transactions = function() {
             "columnDefs": [
                 { "className": "hide-on-med-and-down", "targets": [ 1 ] },
                 { "className": "center-align hide-on-med-and-down", "targets": [ 3 ] },
-                { "className": "amount right-align", "targets": [ 4, 5 ] },
+                { "className": "right-align", "targets": [ 4, 5 ] },
                 { "className": "hide", "targets": [ 6, 7 ] },
                 {
                     targets: [ 0 ],
@@ -129,10 +129,6 @@ let Transactions = function() {
                 }
             },
             "createdRow": function (row, data) {
-                if ( data[ "amount" ].charAt(0) !== "-" ) {
-                    $( row ).addClass( "credit" );
-                }
-
                 $( row ).data( "timestamp", data.timestamp );
             },
             "initComplete": function(settings, json) {

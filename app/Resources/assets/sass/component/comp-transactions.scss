@@ -24,16 +24,7 @@ table.comp-transactions {
         background: $secondary-color-light;
       }
 
-      &.credit {
-        color: $secondary-color-dark;
-
-        .amount {
-          font-weight: bold;
-        }
-      }
-
-      &.selected,
-      &.selected.credit {
+      &.selected {
         color: white;
         background-color: $secondary-color-dark;
       }
