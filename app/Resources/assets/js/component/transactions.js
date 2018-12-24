@@ -146,7 +146,7 @@ let Transactions = function() {
 
                 if ( json.data ) {
                     if ( row.length > 0 ) {
-                        table.row( row ).data( json.data ).select().draw( false ).scrollTo();
+                        table.row( row ).data( json.data ).select().draw( false );
                     } else {
                         table.row.add( json.data ).select().draw( false ).scrollTo();
                     }
@@ -159,10 +159,12 @@ let Transactions = function() {
                 }
 
                 if (xhr) {
-                    xhr.abort();
+                    clearTimeout(xhr);
                 }
 
-                xhr = $.get( $container.data( "create" ));
+                xhr = setTimeout(function() {
+                    $.get( $container.data( "create" ));
+                }, 3000);
             }
         };
 
