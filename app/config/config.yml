@@ -92,3 +92,10 @@ stof_doctrine_extensions:
         default:
             sluggable: true
             timestampable: true
+
+simple_things_entity_audit:
+    audited_entities:
+        - AppBundle\Entity\Transaction
+    global_ignore_columns:
+        - created_at
+        - updated_at
