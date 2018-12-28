@@ -11,6 +11,7 @@ let Transactions = function() {
         }
 
         let lastRow = 0;
+        let cacagnotteBorder = false;
 
         let table = $container.DataTable( {
             "dom": 'tiB',
@@ -130,6 +131,14 @@ let Transactions = function() {
             },
             "createdRow": function (row, data) {
                 $( row ).data( "timestamp", data.timestamp );
+
+                if ( !data[ "transactionAt" ] ) {
+                    if ( !cacagnotteBorder ) {
+                        $( row ).addClass( "cacagnotte" );
+                    }
+
+                    cacagnotteBorder = true;
+                }
             },
             "initComplete": function(settings, json) {
                 lastRow = json.data.length - 1;

@@ -28,6 +28,10 @@ table.comp-transactions {
         color: white;
         background-color: $secondary-color-dark;
       }
+
+      &.cacagnotte {
+        border-top: 10px solid $secondary-color;
+      }
     }
   }
 }
