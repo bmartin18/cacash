@@ -409,9 +409,17 @@ class TransactionController extends Controller
             }
         }
 
+        if (isset($changedEntities[0])) {
+            $accountId = $changedEntities[0]->getEntity()->getAccount()->getId();
+        }
+
+        if ($transaction) {
+            $accountId = $transaction->getAccount()->getId();
+        }
+
         return $this->render('transaction/logs.html.twig', array(
             'changedEntities' => $changedEntities,
-            'accountId' => $transaction->getAccount()->getId(),
+            'accountId' => $accountId,
         ));
     }
 
