@@ -1,0 +1,45 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Historique de la transaction{% endblock title %}
+
+{% block body %}
+    {% if page > 1 %}
+        <a class="btn yellow black-text" href="{{ path('transactions_logs', {'page': page-1}) }}">< Page précédente</a>
+    {% endif %}
+    <a class="btn yellow black-text" href="{{ path('transactions_logs', {'page': page+1}) }}">Page suivante ></a>
+
+    <div class="card">
+        <div class="card-content">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Action</th>
+                    <th scope="col"></th>
+                    <th scope="col">Date</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Catégorie</th>
+                    <th scope="col">Label</th>
+                    <th scope="col">Pointage</th>
+                    <th scope="col">Montant</th>
+                    <th scope="col">Compte</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for changedEntity in changedEntities %}
+                    <tr>
+                        <th scope="row">{{ changedEntity.revisionType }}</th>
+                        <th scope="row">{{ changedEntity.entity.updatedAt|date('d/m/Y H:i:s') }}</th>
+                        <td>{{ changedEntity.entity.transactionAt|date('d/m/Y') }}</td>
+                        <td>{{ changedEntity.entity.hash }}</td>
+                        <td>{{ changedEntity.entity.category.name|default }}</td>
+                        <td>{{ changedEntity.entity.description }}</td>
+                        <td>{{ changedEntity.entity.checked }}</td>
+                        <td>{{ changedEntity.entity.amount|price }}</td>
+                        <td><a href="{{ path('account', {'id': changedEntity.entity.account.id, 'slug': changedEntity.entity.account.slug}) }}">#{{ changedEntity.entity.account.id }}</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock body %}

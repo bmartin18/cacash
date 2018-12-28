@@ -8,6 +8,7 @@ use AppBundle\Form\ImportTransactionType;
 use AppBundle\Form\TransactionType;
 use AppBundle\Helper\ImportTransactionsHelper;
 use AppBundle\Repository\TransactionRepository;
+use SimpleThings\EntityAudit\AuditReader;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -27,18 +28,24 @@ class TransactionController extends Controller
     /** @var ImportTransactionsHelper */
     private $importTransactionsHelper;
 
+    /** @var AuditReader */
+    private $auditReader;
+
     /**
      * TransactionController constructor.
      *
      * @param TransactionRepository    $transactionRepository
      * @param ImportTransactionsHelper $importTransactionsHelper
+     * @param AuditReader              $auditReader
      */
     public function __construct(
         TransactionRepository $transactionRepository,
-        ImportTransactionsHelper $importTransactionsHelper
+        ImportTransactionsHelper $importTransactionsHelper,
+        AuditReader $auditReader
     ) {
         $this->transactionRepository = $transactionRepository;
         $this->importTransactionsHelper = $importTransactionsHelper;
+        $this->auditReader = $auditReader;
     }
 
     /**
@@ -360,5 +367,78 @@ class TransactionController extends Controller
         }
 
         return new JsonResponse($json);
+    }
+
+    /**
+     * @Route("/transaction-{id}/logs.html", name="transaction_logs",
+     *      requirements={
+     *          "id": "\d+",
+     *      }
+     * )
+     *
+     * @ParamConverter("id", class="AppBundle:Transaction")
+     *
+     * @param Transaction $transaction
+     *
+     * @return Response
+     *
+     * @throws \SimpleThings\EntityAudit\Exception\NotAuditedException
+     */
+    public function transactionLogsAction(Transaction $transaction)
+    {
+        if ($this->getUser() !== $transaction->getAccount()->getUser()) {
+            throw $this->createAccessDeniedException('You cannot access to this account.');
+        }
+
+        $revisions = $this
+            ->auditReader
+            ->findRevisions(Transaction::class, $transaction->getId())
+        ;
+
+        $changedEntities = [];
+
+        foreach ($revisions as $revision) {
+            $changedEntity = $this->auditReader->findEntitiesChangedAtRevision($revision->getRev());
+
+            if (!empty($changedEntity)) {
+                $changedEntities[] = reset($changedEntity);
+            }
+        }
+
+        return $this->render('transaction/logs.html.twig', array(
+            'changedEntities' => $changedEntities,
+        ));
+    }
+
+    /**
+     * @Route("/transactions/logs.html", name="transactions_logs")
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function transactionsLogsAction(Request $request)
+    {
+        $page = $request->get('page', 1);
+
+        $revisions = $this
+            ->auditReader
+            ->findRevisionHistory(20, 20 * ($page - 1))
+        ;
+
+        $changedEntities = [];
+
+        foreach ($revisions as $revision) {
+            $changedEntity = $this->auditReader->findEntitiesChangedAtRevision($revision->getRev());
+
+            if (!empty($changedEntity)) {
+                $changedEntities[] = reset($changedEntity);
+            }
+        }
+
+        return $this->render('transaction/logs.html.twig', array(
+            'changedEntities' => $changedEntities,
+            'page' => $page,
+        ));
     }
 }
