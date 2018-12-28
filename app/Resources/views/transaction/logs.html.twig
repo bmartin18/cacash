@@ -1,12 +1,16 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Historique de la transaction{% endblock title %}
+{% block title %}Historique des transactions{% endblock title %}
 
 {% block body %}
-    {% if page > 1 %}
-        <a class="btn yellow black-text" href="{{ path('transactions_logs', {'page': page-1}) }}">< Page précédente</a>
+    {% if page is defined %}
+        {% if page > 1 %}
+            <a class="btn yellow black-text" href="{{ path('transactions_logs', {'page': page-1}) }}">< Page précédente</a>
+        {% endif %}
+        <a class="btn yellow black-text" href="{{ path('transactions_logs', {'page': page+1}) }}">Page suivante ></a>
+    {% else %}
+        <a class="btn yellow black-text" href="{{ path('transactions_logs') }}">Historique des transactions</a>
     {% endif %}
-    <a class="btn yellow black-text" href="{{ path('transactions_logs', {'page': page+1}) }}">Page suivante ></a>
 
     <div class="card">
         <div class="card-content">
@@ -22,6 +26,9 @@
                     <th scope="col">Pointage</th>
                     <th scope="col">Montant</th>
                     <th scope="col">Compte</th>
+                    {% if page is defined %}
+                        <th scope="col">Transaction</th>
+                    {% endif %}
                 </tr>
                 </thead>
                 <tbody>
@@ -36,6 +43,9 @@
                         <td>{{ changedEntity.entity.checked }}</td>
                         <td>{{ changedEntity.entity.amount|price }}</td>
                         <td><a href="{{ path('account', {'id': changedEntity.entity.account.id, 'slug': changedEntity.entity.account.slug}) }}">#{{ changedEntity.entity.account.id }}</a></td>
+                        {% if page is defined %}
+                            <td><a href="{{ path('transaction_logs', {'id': changedEntity.entity.id}) }}">#{{ changedEntity.entity.id }}</a></td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
                 </tbody>
