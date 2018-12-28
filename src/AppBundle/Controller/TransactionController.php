@@ -376,28 +376,32 @@ class TransactionController extends Controller
      *      }
      * )
      *
-     * @ParamConverter("id", class="AppBundle:Transaction")
-     *
-     * @param Transaction $transaction
+     * @param int $id
      *
      * @return Response
      *
      * @throws \SimpleThings\EntityAudit\Exception\NotAuditedException
      */
-    public function transactionLogsAction(Transaction $transaction)
+    public function transactionLogsAction($id)
     {
-        if ($this->getUser() !== $transaction->getAccount()->getUser()) {
+        $transaction = $this->transactionRepository->find($id);
+
+        if ($transaction && $this->getUser() !== $transaction->getAccount()->getUser()) {
             throw $this->createAccessDeniedException('You cannot access to this account.');
         }
 
         $revisions = $this
             ->auditReader
-            ->findRevisions(Transaction::class, $transaction->getId())
+            ->findRevisions(Transaction::class, $id)
         ;
 
         $changedEntities = [];
 
         foreach ($revisions as $revision) {
+            if ($revision->getUsername() !== $this->getUser()->getUsername()) {
+                continue;
+            }
+
             $changedEntitiesAtRevision = $this->auditReader->findEntitiesChangedAtRevision($revision->getRev());
 
             foreach ($changedEntitiesAtRevision as $changedEntity) {
