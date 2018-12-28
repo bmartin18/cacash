@@ -42,7 +42,7 @@
             </div>
             <div class="modal-footer">
                 {% if form.vars.value.id|default %}
-                    <a class="left btn yellow black-text" target="_blank" href="{{ path('transaction_logs', {'id': form.vars.value.id}) }}">Historique</a>
+                    <a class="left btn yellow black-text" target="_blank" href="{{ path('transaction_logs', {'id': form.vars.value.id}) }}"><i class="material-icons left">history</i> Historique</a>
                 {% endif %}
                 {{ form_row(form.save) }}
             </div>

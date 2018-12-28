@@ -5,11 +5,11 @@
 {% block body %}
     {% if page is defined %}
         {% if page > 1 %}
-            <a class="btn yellow black-text" href="{{ path('transactions_logs', {'page': page-1}) }}">< Page précédente</a>
+            <a class="btn yellow black-text" href="{{ path('transactions_logs', {'page': page-1, 'accountId': accountId}) }}">< Page précédente</a>
         {% endif %}
-        <a class="btn yellow black-text" href="{{ path('transactions_logs', {'page': page+1}) }}">Page suivante ></a>
+        <a class="btn yellow black-text" href="{{ path('transactions_logs', {'page': page+1, 'accountId': accountId}) }}">Page suivante ></a>
     {% else %}
-        <a class="btn yellow black-text" href="{{ path('transactions_logs') }}">Historique des transactions</a>
+        <a class="btn yellow black-text" href="{{ path('transactions_logs', {'accountId': accountId}) }}"><i class="material-icons left">history</i>Historique des transactions</a>
     {% endif %}
 
     <div class="card">

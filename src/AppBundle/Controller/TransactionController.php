@@ -411,17 +411,19 @@ class TransactionController extends Controller
 
         return $this->render('transaction/logs.html.twig', array(
             'changedEntities' => $changedEntities,
+            'accountId' => $transaction->getAccount()->getId(),
         ));
     }
 
     /**
-     * @Route("/transactions/logs.html", name="transactions_logs")
+     * @Route("/transactions/account-{accountId}/logs.html", name="transactions_logs")
      *
      * @param Request $request
+     * @param int     $accountId
      *
      * @return Response
      */
-    public function transactionsLogsAction(Request $request)
+    public function transactionsLogsAction(Request $request, $accountId)
     {
         $page = $request->get('page', 1);
         $revisions = true;
@@ -441,7 +443,9 @@ class TransactionController extends Controller
                 $changedEntitiesAtRevision = $this->auditReader->findEntitiesChangedAtRevision($revision->getRev());
 
                 foreach ($changedEntitiesAtRevision as $changedEntity) {
-                    $changedEntities[] = $changedEntity;
+                    if ((int) $accountId === $changedEntity->getEntity()->getAccount()->getId()) {
+                        $changedEntities[] = $changedEntity;
+                    }
                 }
             }
 
@@ -451,6 +455,7 @@ class TransactionController extends Controller
         return $this->render('transaction/logs.html.twig', array(
             'changedEntities' => $changedEntities,
             'page' => $request->get('page', 1),
+            'accountId' => $accountId,
         ));
     }
 }
