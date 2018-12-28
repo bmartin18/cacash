@@ -398,10 +398,10 @@ class TransactionController extends Controller
         $changedEntities = [];
 
         foreach ($revisions as $revision) {
-            $changedEntity = $this->auditReader->findEntitiesChangedAtRevision($revision->getRev());
+            $changedEntitiesAtRevision = $this->auditReader->findEntitiesChangedAtRevision($revision->getRev());
 
-            if (!empty($changedEntity)) {
-                $changedEntities[] = reset($changedEntity);
+            foreach ($changedEntitiesAtRevision as $changedEntity) {
+                $changedEntities[] = $changedEntity;
             }
         }
 
@@ -420,25 +420,33 @@ class TransactionController extends Controller
     public function transactionsLogsAction(Request $request)
     {
         $page = $request->get('page', 1);
-
-        $revisions = $this
-            ->auditReader
-            ->findRevisionHistory(20, 20 * ($page - 1))
-        ;
-
+        $revisions = true;
         $changedEntities = [];
 
-        foreach ($revisions as $revision) {
-            $changedEntity = $this->auditReader->findEntitiesChangedAtRevision($revision->getRev());
+        while ($revisions && count($changedEntities) < 20) {
+            $revisions = $this
+                ->auditReader
+                ->findRevisionHistory(20, 20 * ($page - 1))
+            ;
 
-            if (!empty($changedEntity)) {
-                $changedEntities[] = reset($changedEntity);
+            foreach ($revisions as $revision) {
+                if ($revision->getUsername() !== $this->getUser()->getUsername()) {
+                    continue;
+                }
+
+                $changedEntitiesAtRevision = $this->auditReader->findEntitiesChangedAtRevision($revision->getRev());
+
+                foreach ($changedEntitiesAtRevision as $changedEntity) {
+                    $changedEntities[] = $changedEntity;
+                }
             }
+
+            $page++;
         }
 
         return $this->render('transaction/logs.html.twig', array(
             'changedEntities' => $changedEntities,
-            'page' => $page,
+            'page' => $request->get('page', 1),
         ));
     }
 }
