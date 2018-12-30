@@ -132,7 +132,7 @@ let Transactions = function() {
             "createdRow": function (row, data) {
                 $( row ).data( "timestamp", data.timestamp );
 
-                if ( !data[ "transactionAt" ] ) {
+                if ( !data[ "transactionAt" ] || data[ "timestamp" ] > $.now() / 1000 ) {
                     if ( !cacagnotteBorder ) {
                         $( row ).addClass( "cacagnotte" );
                     }
