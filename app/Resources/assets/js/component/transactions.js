@@ -90,11 +90,15 @@ let Transactions = function() {
                         let data = table.rows( { selected: true } ).data();
 
                         $( data ).each( function() {
-                            $.get( $container.data( "delete" ) + "/" + this[ "id" ], function( json ) {
-                                if ( json.success ) {
-                                    updateRow( json );
-                                }
-                            } );
+                            let userResponse = confirm("Voulez vous supprimer la transaction " + this[ "description" ].replace( /\r?\n|\r/, "" ) + " ?");
+
+                            if ( userResponse ) {
+                                $.get( $container.data( "delete" ) + "/" + this[ "id" ], function( json ) {
+                                    if ( json.success ) {
+                                        updateRow( json );
+                                    }
+                                } );
+                            }
                         } );
 
                         table.rows().deselect();
@@ -173,7 +177,7 @@ let Transactions = function() {
 
                 xhr = setTimeout(function() {
                     $.get( $container.data( "create" ));
-                }, 3000);
+                }, 1500);
             }
         };
 
@@ -205,12 +209,6 @@ let Transactions = function() {
             if ( e.keyCode === 13 ) {
                 table.button( ".button-edit" ).trigger();
                 table.rows().deselect();
-
-                return;
-            }
-
-            if ( e.keyCode === 46 || e.keyCode === 8 ) {
-                table.button( ".button-delete" ).trigger();
 
                 return;
             }
