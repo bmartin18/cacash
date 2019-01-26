@@ -279,6 +279,7 @@ let Transactions = function() {
                 weekdaysShort: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
                 weekdaysLetter: ["D","L", "M", "M", "J", "V", "S"],
                 format: 'dd/mm/yyyy',
+                firstDay: 1,
             });
 
             $.get( $( ".autocomplete" ).data( "autocomplete" ), function( autocomplete ) {
