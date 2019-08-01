@@ -28,4 +28,5 @@
   "display": "standalone",
   "theme_color": "#feea3b",
   "scope": "/",
+  "orientation": "landscape"
 }
