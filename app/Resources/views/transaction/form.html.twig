@@ -4,46 +4,48 @@
     {% else %}
         {{ form_start(form, {'attr': {'data-action': path('create_transaction', {'id': account.id})}}) }}
     {% endif %}
-        <div class="modal-content">
-            <div class="row">
-                <div class="col l5 s12">
-                    {{ form_row(form.hash) }}
+        <div class="container">
+            <div class="modal-content">
+                <div class="row">
+                    <div class="col l5 s12">
+                        {{ form_row(form.hash) }}
+                    </div>
+                    <div class="col l7 s12">
+                        {{ form_row(form.description, {'attr': {
+                            'class': 'autocomplete',
+                            'autocomplete': 'off',
+                            'data-autocomplete': path('autocomplete_transactions', {'id': account.id})
+                        }}) }}
+                    </div>
                 </div>
-                <div class="col l7 s12">
-                    {{ form_row(form.description, {'attr': {
-                        'class': 'autocomplete',
-                        'autocomplete': 'off',
-                        'data-autocomplete': path('autocomplete_transactions', {'id': account.id})
-                    }}) }}
+                <div class="row">
+                    <div class="col l5 s12">
+                        {{ form_row(form.amountDisplayable) }}
+                    </div>
+                    <div class="col l7 s12">
+                        {{ form_row(form.transactionAtDisplayable, {'attr': {'class': 'datepicker'}}) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col l5 s12">
+                        {{ form_row(form.category) }}
+                    </div>
+                    <div class="col l2 s12 offset-l1">
+                        <span class="hide-on-med-and-down"><br /></span>
+                        {{ form_row(form.debit) }}
+                    </div>
+                    <div class="col l2 s12">
+                        <span class="hide-on-med-and-down"><br /></span>
+                        {{ form_row(form.checked) }}
+                    </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col l5 s12">
-                    {{ form_row(form.amountDisplayable) }}
-                </div>
-                <div class="col l7 s12">
-                    {{ form_row(form.transactionAtDisplayable, {'attr': {'class': 'datepicker'}}) }}
-                </div>
+            <div class="modal-footer">
+                {% if form.vars.value.id|default %}
+                    <a class="left btn yellow black-text" target="_blank" href="{{ path('transaction_logs', {'id': form.vars.value.id}) }}"><i class="material-icons left">history</i> Historique</a>
+                {% endif %}
+                {{ form_row(form.save) }}
             </div>
-            <div class="row">
-                <div class="col l5 s12">
-                    {{ form_row(form.category) }}
-                </div>
-                <div class="col l2 s12 offset-l1">
-                    <span class="hide-on-med-and-down"><br /></span>
-                    {{ form_row(form.debit) }}
-                </div>
-                <div class="col l2 s12">
-                    <span class="hide-on-med-and-down"><br /></span>
-                    {{ form_row(form.checked) }}
-                </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            {% if form.vars.value.id|default %}
-                <a class="left btn yellow black-text" target="_blank" href="{{ path('transaction_logs', {'id': form.vars.value.id}) }}"><i class="material-icons left">history</i> Historique</a>
-            {% endif %}
-            {{ form_row(form.save) }}
         </div>
     {{ form_end(form) }}
 </div>
