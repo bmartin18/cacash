@@ -9,4 +9,20 @@
       background: $primary-color;
     }
   }
+
+  ul#nav-mobile {
+    li {
+      display: none;
+
+      &:last-child {
+        display: block;
+      }
+    }
+
+    @media only screen and (min-width: 993px) {
+      li {
+        display: block;
+      }
+    }
+  }
 }

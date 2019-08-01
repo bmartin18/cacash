@@ -2,7 +2,7 @@
     <nav id="comp-header">
         <div class="container nav-wrapper">
             <a href="{{ path('homepage') }}" id="cacash-logo"><img src="{{ asset('images/logo/cacash-header.png') }}" width="300" height="64"></a>
-            <ul id="nav-mobile" class="right show-on-large">
+            <ul id="nav-mobile" class="right">
                 {% for account in app.user.accounts %}
                     {% if account.starred %}
                         <li><a href="{{ path('account', {'id': account.id, 'slug': account.slug}) }}">{{ account.name }}</a></li>
