@@ -81,8 +81,18 @@ form.style-error ul li {
   overflow: visible;
 }
 
+.modal.bottom-sheet {
+  max-height: none;
+}
+
 .autocomplete-content {
   margin: 0;
   position: absolute;
   width: 98%;
+}
+
+@media only screen and (min-width: 993px) {
+  .container {
+    width: 90%;
+  }
 }
